@@ -1,6 +1,8 @@
 # binary
 bin/
 
+node_modules
+
 #deployment
 deploy
 
