@@ -1,36 +1,28 @@
 module.exports = (sequelize, Sequelize) => {
-  const Course = sequelize.define("course", {
-    id: {
+  const User = sequelize.define("user", {
+    userId: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true
     },
-    dept: {
-      type: Sequelize.STRING(4),
-      allowNull: false
-    },
-    courseNumber: {
+    fName: {
       type: Sequelize.STRING,
       allowNull: false
     },
-    level: {
-      type: Sequelize.INTEGER
-    },
-    hours: {
-      type: Sequelize.INTEGER
-    },
-    name: {
+    lName: {
       type: Sequelize.STRING,
       allowNull: false
     },
-    description: {
-      type: Sequelize.STRING
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false
     },
   },
   {
     timestamps: false
   });
 
-  return Course;
+  return User;
 };
+
