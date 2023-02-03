@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Event = sequelize.define("event", {
-    eventId: {
+    id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -20,11 +20,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TIME,
     },
     isVisible: {
-      type: Sequelize.BOOL,
+      type: Sequelize.BOOLEAN,
       allowNull: false,
     },
     canMergeSlots: {
-      type: Sequelize.BOOL,
+      type: Sequelize.BOOLEAN,
       allowNull: false
     },
     slotDuration: {

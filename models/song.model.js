@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Song = sequelize.define("song", {
-    songID: {
+    id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,

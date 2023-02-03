@@ -15,10 +15,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TIME,
     },
     hasPassed: {
-      type: Sequelize.BOOL,
+      type: Sequelize.BOOLEAN,
     },
     isComplete: {
-      type: Sequelize.BOOL,
+      type: Sequelize.BOOLEAN,
     },
   },
   {
