@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Critique = sequelize.define("critique", {
-    critiqueId: {
+    id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -11,8 +11,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     grade: {
-      type: Sequelize.CHAR(1),
-      allowNull: false,
+      type: Sequelize.STRING,
     },
     comment: {
       type: Sequelize.STRING,

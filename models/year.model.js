@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const Year = sequelize.define("year", {
     year: {
-      type: Sequelize.INTEGER(4),
+      type: Sequelize.INTEGER,
       primaryKey: true,
       unique: true
     },

@@ -1,12 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
   const Semester = sequelize.define("semester", {
-    semesterId: {
+    id: {
       type: Sequelize.STRING,
       primaryKey: true,
       unique: true
     },
     code: {
-      type: Sequelize.UNKNOWN,
+      type: Sequelize.STRING,
       allowNull: false
     },
   },

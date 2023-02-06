@@ -25,13 +25,13 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
     },
     stuEmailCritiqueBool: {
-      type: Sequelize.BOOL,
+      type: Sequelize.BOOLEAN,
     },
     stuCompletedHearing: {
-      type: Sequelize.BOOL,
+      type: Sequelize.BOOLEAN,
     },
     title: {
-      type: Sequelize.String,
+      type: Sequelize.STRING,
     },
   },
   {
