@@ -22,21 +22,21 @@ jobs:
                   SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
                   ARGS: '-rltgoDzvO --delete'
                   SOURCE: 'deploy/'
-                  REMOTE_HOST: 'project2.eaglesoftwareteam.com'
+                  REMOTE_HOST: 'perform.eaglesoftwareteam.com'
                   REMOTE_USER: ubuntu
-                  TARGET: 'nodeapps/2022/project2/t2'
+                  TARGET: 'nodeapps/performance/t2'
             - name: Execute SSH commmands on remote server
               uses: JimCronqvist/action-ssh@master
               env:
                   NAME: 'Root'
               with:
-                  hosts: 'ubuntu@project2.eaglesoftwareteam.com'
+                  hosts: 'ubuntu@perform.eaglesoftwareteam.com'
                   privateKey: ${{ secrets.SERVER_SSH_KEY }}
                   debug: false
                   command: |
-                      cd nodeapps/2022/project2/t2
+                      cd nodeapps/performance/t2
                       npm install
-                      sudo systemctl stop course-t2-backend
-                      sudo cp course-t2-backend.service /lib/systemd/system/course-t2-backend.service
+                      sudo systemctl stop performance-t2-backend
+                      sudo cp performance-t2-backend.service /lib/systemd/system/performance-t2-backend.service
                       sudo systemctl daemon-reload
-                      sudo systemctl start course-t2-backend
+                      sudo systemctl start performance-t2-backend
