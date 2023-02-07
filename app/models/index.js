@@ -43,8 +43,8 @@ db.evaluationComment = require("./evaluationComment.model.js")(sequelize, Sequel
 
 
 //Availability FKs
-db.user.hasMany(db.availability,{as: "availability"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.availability.belongsTo(db.user,{as: "user"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.user.hasMany(db.availability,{as: "availability"}, {foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.availability.belongsTo(db.user,{as: "user"}, {foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 
 //UserRole FKs
 db.user.hasMany(db.userRole,{as: "userRole"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
@@ -121,4 +121,3 @@ db.evaluation.hasMany(db.evaluationComment,{as: "evaluationComment"},{foreignkey
 db.evaluationComment.belongsTo(db.evaluation,{as: "evaluation"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 
 module.exports = db;
-
