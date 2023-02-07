@@ -1,7 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
   const Semester = sequelize.define("semester", {
     id: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
       unique: true
     },

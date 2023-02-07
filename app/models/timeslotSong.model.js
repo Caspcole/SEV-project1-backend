@@ -1,7 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
   const TimeslotSong = sequelize.define("timeslotSong", {
-    role: {
-      type: Sequelize.STRING,
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
       unique: true
     },
