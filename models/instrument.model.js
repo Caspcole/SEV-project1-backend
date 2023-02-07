@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Instrument = sequelize.define("instrument", {
-    instrument: {
+    name: {
       type: Sequelize.STRING,
       primaryKey: true,
       unique: true

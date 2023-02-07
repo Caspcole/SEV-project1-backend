@@ -8,13 +8,13 @@ module.exports = (sequelize, Sequelize) => {
     },
     type: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: false
     },
     grade: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     comment: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
   },
   {

@@ -1,37 +1,35 @@
 module.exports = (sequelize, Sequelize) => {
   const UserRole = sequelize.define("userRole", {
-    role: {
-      type: Sequelize.STRING,
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
       unique: true
     },
-    date: {
-      type: Sequelize.DATEONLY,
+    role: {
+      type: Sequelize.STRING,
       allowNull: false
     },
     type: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     stuClassification: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     stuMajor: {
-      type: Sequelize.STRING,
-    },
-    stuClassification: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     stuNumOfSemesters: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER
     },
     stuEmailCritiqueBool: {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.BOOLEAN
     },
     stuCompletedHearing: {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.BOOLEAN
     },
     title: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
   },
   {

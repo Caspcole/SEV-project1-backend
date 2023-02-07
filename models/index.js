@@ -58,13 +58,12 @@ db.userRole.belongsTo(db.user,{as: "user"},{foreignkey: {allowNull: false }, onD
 db.user.hasMany(db.studentInstrument,{as: "instrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 db.studentInstrument.belongsTo(db.user,{as: "student"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 // instruments have studentInstruments
-db.instrument.hasMany(db.studentInstrument,{as: "student"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.instrument.hasMany(db.studentInstrument,{as: "studentInstrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 db.studentInstrument.belongsTo(db.instrument,{as: "instrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 // accompanists have studentInstruments
 db.userRole.hasMany(db.studentInstrument,{as: "studentInstrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 db.studentInstrument.belongsTo(db.userRole,{as: "accompanist"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 // instructors have studentInstruments
-//THIS IS RIGHT THINKING - I think...
 db.userRole.hasMany(db.studentInstrument,{as: "studentInstruments"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 db.studentInstrument.belongsTo(db.userRole,{as: "instructor"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 
@@ -81,8 +80,8 @@ db.studentTimeslot.belongsTo(db.userRole,{as: "instructor"},{foreignkey: {allowN
 
 //Critique
 //  critiquers has critique
-db.critique.hasMany(db.userRole,{as: "critiquer"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.userRole.belongsTo(db.critique,{as: "critique"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.userRole.hasMany(db.critique,{as: "critique"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.critique.belongsTo(db.userRole,{as: "critiquer"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 //  studentTimeslots has critique
 db.studentTimeslot.hasMany(db.critique,{as: "critique"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
 db.critique.belongsTo(db.studentTimeslot,{as: "timeslot"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});

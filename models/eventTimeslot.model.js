@@ -1,24 +1,24 @@
 module.exports = (sequelize, Sequelize) => {
   const EventTimeslot = sequelize.define("eventTimeslot", {
-    timeslot: {
-      type: Sequelize.TIME,
+    id: {
+      type: Sequelize.INTEGER,
       primaryKey: true,
       unique: true
     },
     type: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     startTime: {
-      type: Sequelize.TIME,
+      type: Sequelize.TIME
     },
     endTime: {
-      type: Sequelize.TIME,
+      type: Sequelize.TIME
     },
     hasPassed: {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.BOOLEAN
     },
     isComplete: {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.BOOLEAN
     },
   },
   {
