@@ -7,22 +7,17 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body.date) {
     res.status(400).send({
-      message: "date can not be empty!"
+      message: "Date can not be empty!"
     });
     return;
   } else if (!req.body.startTime) {
     res.status(400).send({
-      message: "start time can not be empty!"
+      message: "Start time can not be empty!"
     });
     return;
   } else if (!req.body.endTime) {
     res.status(400).send({
-      message: "end time can not be empty!"
-    });
-    return;
-  } else if (!req.body.userId) {
-    res.status(400).send({
-      message: "userId time can not be empty!"
+      message: "End time can not be empty!"
     });
     return;
   }
@@ -30,8 +25,7 @@ exports.create = (req, res) => {
   const availability = {
     date: req.body.date,
     startTime: req.body.startTime,
-    endTime: req.body.endTime,
-    userId: req.body.userId
+    endTime: req.body.endTime
   };
 
   // Create and Save a new availability
