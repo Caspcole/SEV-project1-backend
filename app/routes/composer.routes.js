@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all composers
     router.delete("/", composer.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/composer', router);
 };

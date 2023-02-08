@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all availability
     router.delete("/", availability.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/availability', router);
 };

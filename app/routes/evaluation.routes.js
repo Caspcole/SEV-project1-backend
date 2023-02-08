@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all evaluations
     router.delete("/", evaluation.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/evaluation', router);
 };

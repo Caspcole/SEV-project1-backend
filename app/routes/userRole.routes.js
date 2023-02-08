@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all userRoles
     router.delete("/", userRole.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/userRole', router);
 };

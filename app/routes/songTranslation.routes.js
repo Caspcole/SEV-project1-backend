@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all songTranslations
     router.delete("/", songTranslation.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/songTranslation', router);
 };

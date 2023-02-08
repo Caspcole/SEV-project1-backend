@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all semesters
     router.delete("/", semester.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/semester', router);
 };

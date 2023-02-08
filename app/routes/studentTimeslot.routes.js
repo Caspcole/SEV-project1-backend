@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all studentTimeslots
     router.delete("/", studentTimeslot.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/studentTimeslot', router);
 };

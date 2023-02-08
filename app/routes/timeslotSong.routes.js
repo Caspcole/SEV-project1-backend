@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all timeslotSongs
     router.delete("/", timeslotSong.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/timeslotSong', router);
 };

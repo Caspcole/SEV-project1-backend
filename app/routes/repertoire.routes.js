@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all repertoires
     router.delete("/", repertoire.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/repertoire', router);
 };

@@ -15,5 +15,5 @@ module.exports = app => {
     // Delete all users
     router.delete("/", user.deleteAll);
 
-    app.use('/performance-t2', router);
+    app.use('/performance-t2/user', router);
 };
