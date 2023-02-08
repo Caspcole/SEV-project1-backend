@@ -7,8 +7,7 @@ module.exports = (sequelize, Sequelize) => {
       unique: true,
     },
     level: {
-      type: Sequelize.STRING,
-      allowNull: true,
+      type: Sequelize.STRING
     },
   },
   {

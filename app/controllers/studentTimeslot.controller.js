@@ -1,141 +1,141 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const Avilability = db.availability;
+const StudentTimeslot = db.studentTimeslot;
 
-// Create and Save a new availability
+// Create and Save a new studentTimeslot
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.date) {
+  if (!req.body.studentInstrumentId) {
     res.status(400).send({
-      message: "Date can not be empty!"
+      message: "studentInstrumentId can not be empty!"
     });
     return;
-  } else if (!req.body.startTime) {
+  } else if (!req.body.eventTimeslotId) {
     res.status(400).send({
-      message: "Start time can not be empty!"
+      message: "eventTimeslotId can not be empty!"
     });
     return;
-  } else if (!req.body.endTime) {
+  } else if (!req.body.instructorId) {
     res.status(400).send({
-      message: "End time can not be empty!"
+      message: "instructorId can not be empty!"
     });
     return;
   }
   
-  const availability = {
-    date: req.body.date,
-    startTime: req.body.startTime,
-    endTime: req.body.endTime
+  const studentTimeslot = {
+    studentInstrumentId: req.body.studentInstrumentId,
+    eventTimeslotId: req.body.eventTimeslotId,
+    instructorId: req.body.instructorId
   };
 
-  // Create and Save a new availability
-  Avilability.create(availability)
+  // Create and Save a new studentTimeslot
+  StudentTimeslot.create(studentTimeslot)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the availability."
+          err.message || "Some error occurred while creating the studentTimeslot."
       });
     });
 };
 
-// Retrieve all availabilities from the database
+// Retrieve all studentTimeslots from the database
 exports.findAll = (req, res) => {
-  Avilability.findAll()
+  StudentTimeslot.findAll()
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Availabilities."
+          err.message || "Some error occurred while retrieving studentTimeslots."
       });
     });
 };
 
-// Retrieve a(n) availability by id
+// Retrieve a(n) studentTimeslot by id
 exports.findById = (req, res) => {
   const id = req.params.id;
-  Avilability.findByPk(id)
+  StudentTimeslot.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: 'Cannot find availability with id=' + id
+          message: 'Cannot find studentTimeslot with id=' + id
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Error retrieving availability with id=' + id
+        message: 'Error retrieving studentTimeslot with id=' + id
       });
     });
 };
 
-// Update a(n) availability by the id in the request
+// Update a(n) studentTimeslot by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  Avilability.update(req.body, {
+  StudentTimeslot.update(req.body, {
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was updated successfully.'
+        message: 'StudentTimeslot was updated successfully.'
       });
     } else {
       res.send({
-        message: 'Cannot update availability with id=' + id + '. Maybe the availability was not found or req.body is empty!'
+        message: 'Cannot update studentTimeslot with id=' + id + '. Maybe the studentTimeslot was not found or req.body is empty!'
       });
     }
   })
   .catch(err => {
     res.status(500).send({
-      message: 'Error updating availability with id=' + id
+      message: 'Error updating studentTimeslot with id=' + id
     });
   });
 };
 
-// Delete a(n) availability with the specified id in the request
+// Delete a(n) studentTimeslot with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Avilability.destroy({
+  StudentTimeslot.destroy({
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was deleted successfully!'
+        message: 'StudentTimeslot was deleted successfully!'
       });
     } else {
       res.send({
-        message: 'Cannot delete availability with id=' + id + '. Maybe the availability was not found'
+        message: 'Cannot delete studentTimeslot with id=' + id + '. Maybe the studentTimeslot was not found'
       })
     }
   })
   .catch((err) => {
     res.status(500).send({
-      message: "Could not delete availability with id=" + id,
+      message: "Could not delete studentTimeslot with id=" + id,
     });
   });
 };
 
-// Delete all availability from the database.
+// Delete all studentTimeslots from the database.
 exports.deleteAll = (req, res) => {
-  Avilability.destroy({
+  StudentTimeslot.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} availability were deleted successfully!` });
+      res.send({ message: `${nums} studentTimeslots were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all availability.",
+          err.message || "Some error occurred while removing all studentTimeslots.",
       });
     });
 };
