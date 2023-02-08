@@ -19,10 +19,23 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-
-//require("./app/routes/course.routes.js")(app);
-
-
+require("./app/routes/availability.routes.js")(app);
+require("./app/routes/composer.routes.js")(app);
+require("./app/routes/critique.routes.js")(app);
+require("./app/routes/evaluation.routes.js")(app);
+require("./app/routes/evaluationComment.routes.js")(app);
+require("./app/routes/event.routes.js")(app);
+require("./app/routes/eventTimeslot.routes.js")(app);
+require("./app/routes/instrument.routes.js")(app);
+require("./app/routes/repertoire.routes.js")(app);
+require("./app/routes/semester.routes.js")(app);
+require("./app/routes/song.routes.js")(app);
+require("./app/routes/songTranslation.routes.js")(app);
+require("./app/routes/studentInstrument.routes.js")(app);
+require("./app/routes/studentTimeslot.routes.js")(app);
+require("./app/routes/timeslotSong.routes.js")(app);
+require("./app/routes/user.routes.js")(app);
+require("./app/routes/userRole.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3022;
