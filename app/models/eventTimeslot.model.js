@@ -9,10 +9,12 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     startTime: {
-      type: Sequelize.TIME
+      type: Sequelize.TIME,
+      allowNull: false
     },
     endTime: {
-      type: Sequelize.TIME
+      type: Sequelize.TIME,
+      allowNull: false
     },
     hasPassed: {
       type: Sequelize.BOOLEAN

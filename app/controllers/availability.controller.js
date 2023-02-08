@@ -1,6 +1,6 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const Avilability = db.availability;
+const Availability = db.availability;
 
 // Create and Save a new availability
 exports.create = (req, res) => {
@@ -35,7 +35,7 @@ exports.create = (req, res) => {
   };
 
   // Create and Save a new availability
-  Avilability.create(availability)
+  Availability.create(availability)
     .then(data => {
       res.send(data);
     })
@@ -49,7 +49,7 @@ exports.create = (req, res) => {
 
 // Retrieve all availabilities from the database
 exports.findAll = (req, res) => {
-  Avilability.findAll()
+  Availability.findAll()
     .then(data => {
       res.send(data);
     })
@@ -64,7 +64,7 @@ exports.findAll = (req, res) => {
 // Retrieve a(n) availability by id
 exports.findById = (req, res) => {
   const id = req.params.id;
-  Avilability.findByPk(id)
+  Availability.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -84,7 +84,7 @@ exports.findById = (req, res) => {
 // Update a(n) availability by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  Avilability.update(req.body, {
+  Availability.update(req.body, {
     where: { id: id }
   })
   .then(num => {
@@ -108,7 +108,7 @@ exports.update = (req, res) => {
 // Delete a(n) availability with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Avilability.destroy({
+  Availability.destroy({
     where: { id: id }
   })
   .then(num => {
@@ -131,7 +131,7 @@ exports.delete = (req, res) => {
 
 // Delete all availability from the database.
 exports.deleteAll = (req, res) => {
-  Avilability.destroy({
+  Availability.destroy({
     where: {},
     truncate: false,
   })

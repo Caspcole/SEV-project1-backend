@@ -1,8 +1,8 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const Avilability = db.availability;
+const Event = db.event;
 
-// Create and Save a new availability
+// Create and Save a new event
 exports.create = (req, res) => {
   // Validate request
   if (!req.body.date) {
@@ -10,132 +10,147 @@ exports.create = (req, res) => {
       message: "Date can not be empty!"
     });
     return;
-  } else if (!req.body.startTime) {
+  } else if (!req.body.isVisible) {
     res.status(400).send({
-      message: "Start time can not be empty!"
+      message: "isVisible can not be empty!"
     });
     return;
-  } else if (!req.body.endTime) {
+  } else if (!req.body.canMergeSlots) {
     res.status(400).send({
-      message: "End time can not be empty!"
+      message: "canMergeSlots can not be empty!"
+    });
+    return;
+  } else if (!req.body.slotDuration) {
+    res.status(400).send({
+      message: "slot duration can not be empty!"
+    });
+    return;
+  } else if (!req.body.semesterId) {
+    res.status(400).send({
+      message: "semesterId can not be empty!"
     });
     return;
   }
   
-  const availability = {
+  const event = {
+    type: req.body.type,
     date: req.body.date,
     startTime: req.body.startTime,
-    endTime: req.body.endTime
+    endTime: req.body.endTime,
+    isVisible: req.body.isVisible,
+    canMergeSlots: req.body.canMergeSlots,
+    slotDuration: req.body.slotDuration,
+    semesterId: req.body.semesterId
   };
 
-  // Create and Save a new availability
-  Avilability.create(availability)
+  // Create and Save a new event
+  Event.create(event)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the availability."
+          err.message || "Some error occurred while creating the event."
       });
     });
 };
 
-// Retrieve all availabilities from the database
+// Retrieve all events from the database
 exports.findAll = (req, res) => {
-  Avilability.findAll()
+  Event.findAll()
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Availabilities."
+          err.message || "Some error occurred while retrieving events."
       });
     });
 };
 
-// Retrieve a(n) availability by id
+// Retrieve a(n) event by id
 exports.findById = (req, res) => {
   const id = req.params.id;
-  Avilability.findByPk(id)
+  Event.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: 'Cannot find availability with id=' + id
+          message: 'Cannot find event with id=' + id
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Error retrieving availability with id=' + id
+        message: 'Error retrieving event with id=' + id
       });
     });
 };
 
-// Update a(n) availability by the id in the request
+// Update a(n) event by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  Avilability.update(req.body, {
+  Event.update(req.body, {
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was updated successfully.'
+        message: 'Event was updated successfully.'
       });
     } else {
       res.send({
-        message: 'Cannot update availability with id=' + id + '. Maybe the availability was not found or req.body is empty!'
+        message: 'Cannot update event with id=' + id + '. Maybe the event was not found or req.body is empty!'
       });
     }
   })
   .catch(err => {
     res.status(500).send({
-      message: 'Error updating availability with id=' + id
+      message: 'Error updating event with id=' + id
     });
   });
 };
 
-// Delete a(n) availability with the specified id in the request
+// Delete a(n) event with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Avilability.destroy({
+  Event.destroy({
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was deleted successfully!'
+        message: 'Event was deleted successfully!'
       });
     } else {
       res.send({
-        message: 'Cannot delete availability with id=' + id + '. Maybe the availability was not found'
+        message: 'Cannot delete event with id=' + id + '. Maybe the event was not found'
       })
     }
   })
   .catch((err) => {
     res.status(500).send({
-      message: "Could not delete availability with id=" + id,
+      message: "Could not delete event with id=" + id,
     });
   });
 };
 
-// Delete all availability from the database.
+// Delete all events from the database.
 exports.deleteAll = (req, res) => {
-  Avilability.destroy({
+  Event.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} availability were deleted successfully!` });
+      res.send({ message: `${nums} events were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all availability.",
+          err.message || "Some error occurred while removing all event.",
       });
     });
 };

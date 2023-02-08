@@ -1,141 +1,135 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const Avilability = db.availability;
+const Semester = db.semester;
 
-// Create and Save a new availability
+// Create and Save a new semester
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.date) {
+  if (!req.body.year) {
     res.status(400).send({
-      message: "Date can not be empty!"
+      message: "year can not be empty!"
     });
     return;
-  } else if (!req.body.startTime) {
+  } else if (!req.body.code) {
     res.status(400).send({
-      message: "Start time can not be empty!"
-    });
-    return;
-  } else if (!req.body.endTime) {
-    res.status(400).send({
-      message: "End time can not be empty!"
+      message: "semester code can not be empty!"
     });
     return;
   }
   
-  const availability = {
-    date: req.body.date,
-    startTime: req.body.startTime,
-    endTime: req.body.endTime
+  const semester = {
+    year: req.body.year,
+    code: req.body.code
   };
 
-  // Create and Save a new availability
-  Avilability.create(availability)
+  // Create and Save a new semester
+  Semester.create(semester)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the availability."
+          err.message || "Some error occurred while creating the semester."
       });
     });
 };
 
-// Retrieve all availabilities from the database
+// Retrieve all semesters from the database
 exports.findAll = (req, res) => {
-  Avilability.findAll()
+  Semester.findAll()
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Availabilities."
+          err.message || "Some error occurred while retrieving semesters."
       });
     });
 };
 
-// Retrieve a(n) availability by id
+// Retrieve a(n) semester by id
 exports.findById = (req, res) => {
   const id = req.params.id;
-  Avilability.findByPk(id)
+  Semester.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: 'Cannot find availability with id=' + id
+          message: 'Cannot find semester with id=' + id
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Error retrieving availability with id=' + id
+        message: 'Error retrieving semester with id=' + id
       });
     });
 };
 
-// Update a(n) availability by the id in the request
+// Update a(n) semester by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  Avilability.update(req.body, {
+  Semester.update(req.body, {
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was updated successfully.'
+        message: 'Semester was updated successfully.'
       });
     } else {
       res.send({
-        message: 'Cannot update availability with id=' + id + '. Maybe the availability was not found or req.body is empty!'
+        message: 'Cannot update semester with id=' + id + '. Maybe the semester was not found or req.body is empty!'
       });
     }
   })
   .catch(err => {
     res.status(500).send({
-      message: 'Error updating availability with id=' + id
+      message: 'Error updating semester with id=' + id
     });
   });
 };
 
-// Delete a(n) availability with the specified id in the request
+// Delete a(n) semester with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Avilability.destroy({
+  Semester.destroy({
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was deleted successfully!'
+        message: 'Semester was deleted successfully!'
       });
     } else {
       res.send({
-        message: 'Cannot delete availability with id=' + id + '. Maybe the availability was not found'
+        message: 'Cannot delete semester with id=' + id + '. Maybe the semester was not found'
       })
     }
   })
   .catch((err) => {
     res.status(500).send({
-      message: "Could not delete availability with id=" + id,
+      message: "Could not delete semester with id=" + id,
     });
   });
 };
 
-// Delete all availability from the database.
+// Delete all semester from the database.
 exports.deleteAll = (req, res) => {
-  Avilability.destroy({
+  Semester.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} availability were deleted successfully!` });
+      res.send({ message: `${nums} semesters were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all availability.",
+          err.message || "Some error occurred while removing all semesters.",
       });
     });
 };

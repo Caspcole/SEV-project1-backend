@@ -84,7 +84,7 @@ exports.update = (req, res) => {
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'evaluation comment was updated successfully.'
+        message: 'Evaluation comment was updated successfully.'
       });
     } else {
       res.send({
@@ -108,7 +108,7 @@ exports.delete = (req, res) => {
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'evaluation comment was deleted successfully!'
+        message: 'Evaluation comment was deleted successfully!'
       });
     } else {
       res.send({
@@ -123,14 +123,14 @@ exports.delete = (req, res) => {
   });
 };
 
-// Delete all evaluation comment from the database.
+// Delete all evaluation comments from the database.
 exports.deleteAll = (req, res) => {
   EvaluationComment.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} evaluation comment were deleted successfully!` });
+      res.send({ message: `${nums} evaluation comments were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({

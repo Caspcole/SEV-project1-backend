@@ -31,7 +31,6 @@ db.studentTimeslot = require("./studentTimeslot.model.js")(sequelize, Sequelize)
 db.critique = require("./critique.model.js")(sequelize, Sequelize);
 db.eventTimeslot = require("./eventTimeslot.model.js")(sequelize, Sequelize);
 db.event = require("./event.model.js")(sequelize, Sequelize);
-db.year = require("./year.model.js")(sequelize, Sequelize);
 db.semester = require("./semester.model.js")(sequelize, Sequelize);
 db.composer = require("./composer.model.js")(sequelize, Sequelize);
 db.song = require("./song.model.js")(sequelize, Sequelize);
@@ -42,56 +41,52 @@ db.evaluation = require("./evaluation.model.js")(sequelize, Sequelize);
 db.evaluationComment = require("./evaluationComment.model.js")(sequelize, Sequelize);
 
 //Availability FKs
-db.availability.belongsTo(db.user,{as: "user"}, {foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.availability.belongsTo(db.user,{as: "user"}, {foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //Critique FKs
-db.critique.belongsTo(db.userRole,{as: "critiquer"},{foreignkey: {name: "critiquer", allowNull: false }, onDelete: "CASCADE"});
-db.critique.belongsTo(db.studentTimeslot,{as: "timeslot"},{foreignkey: {name: "timeslot", allowNull: false }, onDelete: "CASCADE"});
+db.critique.belongsTo(db.userRole,{as: "critiquer"},{foreignKey: {name: "critiquer", allowNull: false }, onDelete: "CASCADE"});
+db.critique.belongsTo(db.studentTimeslot,{as: "timeslot"},{foreignKey: {name: "timeslot", allowNull: false }, onDelete: "CASCADE"});
 
 //Evaluation FKs
-db.evaluation.belongsTo(db.userRole,{as: "faculty"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.evaluation.belongsTo(db.studentInstrument,{as: "student"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.evaluation.belongsTo(db.userRole,{as: "faculty"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.evaluation.belongsTo(db.studentInstrument,{as: "student"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //EvaluationComment FKs
-db.evaluationComment.belongsTo(db.evaluation,{as: "evaluation"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.evaluationComment.belongsTo(db.evaluation,{as: "evaluation"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //Event FKs
-db.event.belongsTo(db.semester,{as: "semester"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.event.belongsTo(db.semester,{as: "semester"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //EventTimeslot FKs
-db.eventTimeslot.belongsTo(db.userRole,{as: "accompanist"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.eventTimeslot.belongsTo(db.event,{as: "event"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.eventTimeslot.belongsTo(db.userRole,{as: "accompanist"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.eventTimeslot.belongsTo(db.event,{as: "event"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //Repertoire FKs
-db.repertoire.belongsTo(db.userRole,{as: "student"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.repertoire.belongsTo(db.instrument,{as: "instrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.repertoire.belongsTo(db.song,{as: "song"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-
-//Semester FKs
-db.semester.belongsTo(db.year,{as: "year"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.repertoire.belongsTo(db.studentInstrument,{as: "studentInstrument"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.repertoire.belongsTo(db.song,{as: "song"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //Song FKs
-db.song.belongsTo(db.composer,{as: "composer"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.song.belongsTo(db.composer, {as: "composer"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //SongTranslation FKs
-db.songTranslation.belongsTo(db.song,{as: "song"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.songTranslation.belongsTo(db.song,{as: "song"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //StudentInstrument FKs
-db.studentInstrument.belongsTo(db.user,{as: "student"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.studentInstrument.belongsTo(db.instrument,{as: "instrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.studentInstrument.belongsTo(db.userRole,{as: "accompanist"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.studentInstrument.belongsTo(db.userRole,{as: "instructor"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentInstrument.belongsTo(db.user,{as: "student"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentInstrument.belongsTo(db.instrument,{as: "instrument"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentInstrument.belongsTo(db.userRole,{as: "accompanist"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentInstrument.belongsTo(db.userRole,{as: "instructor"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //StudentTimeslot FKs
-db.studentTimeslot.belongsTo(db.studentInstrument,{as: "studentInstrument"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.studentTimeslot.belongsTo(db.eventTimeslot,{as: "eventTimeslot"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.studentTimeslot.belongsTo(db.userRole,{as: "instructor"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentTimeslot.belongsTo(db.studentInstrument,{as: "studentInstrument"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentTimeslot.belongsTo(db.eventTimeslot,{as: "eventTimeslot"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentTimeslot.belongsTo(db.userRole,{as: "instructor"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //TimeslotSong KFs
-db.timeslotSong.belongsTo(db.studentTimeslot,{as: "timeslot"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
-db.timeslotSong.belongsTo(db.song,{as: "song"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.timeslotSong.belongsTo(db.studentTimeslot,{as: "timeslot"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.timeslotSong.belongsTo(db.song,{as: "song"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //UserRole FKs
-db.userRole.belongsTo(db.user,{as: "user"},{foreignkey: {allowNull: false }, onDelete: "CASCADE"});
+db.userRole.belongsTo(db.user,{as: "user"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 module.exports = db;

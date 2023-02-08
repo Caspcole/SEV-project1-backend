@@ -1,141 +1,150 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const Avilability = db.availability;
+const eventTimeslot = db.eventTimeslot;
 
-// Create and Save a new availability
+// Create and Save a new eventTimeslot
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.date) {
+  if (!req.body.startTime) {
     res.status(400).send({
-      message: "Date can not be empty!"
-    });
-    return;
-  } else if (!req.body.startTime) {
-    res.status(400).send({
-      message: "Start time can not be empty!"
+      message: "start time can not be empty!"
     });
     return;
   } else if (!req.body.endTime) {
     res.status(400).send({
-      message: "End time can not be empty!"
+      message: "end time can not be empty!"
+    });
+    return;
+  } else if (!req.body.accompanistId) {
+    res.status(400).send({
+      message: "accompanistId can not be empty!"
+    });
+    return;
+  } else if (!req.body.eventId) {
+    res.status(400).send({
+      message: "eventId can not be empty!"
     });
     return;
   }
   
-  const availability = {
-    date: req.body.date,
+  const eventTimeslot = {
+    type: req.body.type,
     startTime: req.body.startTime,
-    endTime: req.body.endTime
+    endTime: req.body.endTime,
+    hasPassed: req.body.hasPassed,
+    isComplete: req.body.isComplete,
+    accompanistId: req.body.accompanistId,
+    eventId: req.body.eventId
   };
 
-  // Create and Save a new availability
-  Avilability.create(availability)
+  // Create and Save a new eventTimeslot
+  eventTimeslot.create(eventTimeslot)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the availability."
+          err.message || "Some error occurred while creating the eventTimeslot."
       });
     });
 };
 
-// Retrieve all availabilities from the database
+// Retrieve all eventTimeslots from the database
 exports.findAll = (req, res) => {
-  Avilability.findAll()
+  eventTimeslot.findAll()
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Availabilities."
+          err.message || "Some error occurred while retrieving eventTimeslots."
       });
     });
 };
 
-// Retrieve a(n) availability by id
+// Retrieve a(n) eventTimeslot by id
 exports.findById = (req, res) => {
   const id = req.params.id;
-  Avilability.findByPk(id)
+  eventTimeslot.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: 'Cannot find availability with id=' + id
+          message: 'Cannot find eventTimeslot with id=' + id
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: 'Error retrieving availability with id=' + id
+        message: 'Error retrieving eventTimeslot with id=' + id
       });
     });
 };
 
-// Update a(n) availability by the id in the request
+// Update a(n) eventTimeslot by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  Avilability.update(req.body, {
+  eventTimeslot.update(req.body, {
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was updated successfully.'
+        message: 'EventTimeslot was updated successfully.'
       });
     } else {
       res.send({
-        message: 'Cannot update availability with id=' + id + '. Maybe the availability was not found or req.body is empty!'
+        message: 'Cannot update eventTimeslot with id=' + id + '. Maybe the eventTimeslot was not found or req.body is empty!'
       });
     }
   })
   .catch(err => {
     res.status(500).send({
-      message: 'Error updating availability with id=' + id
+      message: 'Error updating eventTimeslot with id=' + id
     });
   });
 };
 
-// Delete a(n) availability with the specified id in the request
+// Delete a(n) eventTimeslot with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Avilability.destroy({
+  eventTimeslot.destroy({
     where: { id: id }
   })
   .then(num => {
     if (num == 1) {
       res.send({
-        message: 'Availability was deleted successfully!'
+        message: 'EventTimeslot was deleted successfully!'
       });
     } else {
       res.send({
-        message: 'Cannot delete availability with id=' + id + '. Maybe the availability was not found'
+        message: 'Cannot delete eventTimeslot with id=' + id + '. Maybe the eventTimeslot was not found'
       })
     }
   })
   .catch((err) => {
     res.status(500).send({
-      message: "Could not delete availability with id=" + id,
+      message: "Could not delete eventTimeslot with id=" + id,
     });
   });
 };
 
-// Delete all availability from the database.
+// Delete all eventTimeslots from the database.
 exports.deleteAll = (req, res) => {
-  Avilability.destroy({
+  eventTimeslot.destroy({
     where: {},
     truncate: false,
   })
     .then((nums) => {
-      res.send({ message: `${nums} availability were deleted successfully!` });
+      res.send({ message: `${nums} eventTimeslots were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all availability.",
+          err.message || "Some error occurred while removing all eventTimeslots.",
       });
     });
 };
