@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-const db = require("./models");
+const db = require("./app/models");
 
 db.sequelize.sync();
 
@@ -14,11 +14,25 @@ app.use(cors(corsOptions));
 app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
-});
-require("./routes/course.routes.js")(app);
+
+require("./app/routes/availability.routes.js")(app);
+require("./app/routes/composer.routes.js")(app);
+require("./app/routes/critique.routes.js")(app);
+require("./app/routes/evaluation.routes.js")(app);
+require("./app/routes/evaluationComment.routes.js")(app);
+require("./app/routes/event.routes.js")(app);
+require("./app/routes/eventTimeslot.routes.js")(app);
+require("./app/routes/instrument.routes.js")(app);
+require("./app/routes/repertoire.routes.js")(app);
+require("./app/routes/semester.routes.js")(app);
+require("./app/routes/song.routes.js")(app);
+require("./app/routes/songTranslation.routes.js")(app);
+require("./app/routes/studentInstrument.routes.js")(app);
+require("./app/routes/studentTimeslot.routes.js")(app);
+require("./app/routes/timeslotSong.routes.js")(app);
+require("./app/routes/user.routes.js")(app);
+require("./app/routes/userRole.routes.js")(app);
+
 // set port, listen for requests
 const PORT = process.env.PORT || 3022;
 app.listen(PORT, () => {
