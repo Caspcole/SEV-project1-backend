@@ -28,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     },
     slotDuration: {
-      type: Sequelize.TIME,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
   },

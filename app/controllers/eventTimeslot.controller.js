@@ -28,7 +28,6 @@ exports.create = (req, res) => {
   }
   
   const eventTimeslot = {
-    type: req.body.type,
     startTime: req.body.startTime,
     endTime: req.body.endTime,
     hasPassed: req.body.hasPassed,
