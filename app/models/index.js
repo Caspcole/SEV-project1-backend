@@ -58,7 +58,7 @@ db.evaluationComment.belongsTo(db.evaluation,{as: "evaluation"},{foreignKey: {al
 db.event.belongsTo(db.semester,{as: "semester"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //EventTimeslot FKs
-db.eventTimeslot.belongsTo(db.userRole,{as: "accompanist"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.eventTimeslot.belongsTo(db.userRole,{as: "accompanist"});
 db.eventTimeslot.belongsTo(db.event,{as: "event"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //Repertoire FKs
