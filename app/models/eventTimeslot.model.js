@@ -3,10 +3,8 @@ module.exports = (sequelize, Sequelize) => {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
       unique: true
-    },
-    type: {
-      type: Sequelize.STRING
     },
     startTime: {
       type: Sequelize.TIME,
@@ -22,6 +20,9 @@ module.exports = (sequelize, Sequelize) => {
     isComplete: {
       type: Sequelize.BOOLEAN
     },
+    isReserved: {
+      type: Sequelize.BOOLEAN
+    }
   },
   {
     timestamps: false
