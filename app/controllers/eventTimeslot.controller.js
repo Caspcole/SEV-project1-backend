@@ -78,6 +78,30 @@ exports.findById = (req, res) => {
     });
 };
 
+// Retrieve a(n) eventTimeslot by id
+exports.findByEventId = (req, res) => {
+  const id = req.params.id;
+  EventTimeslot.findAll({
+    where: {
+      eventId: id
+    }
+  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: 'Cannot find eventTimeslots with EventId=' + id
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: 'Error retrieving eventTimeslot with EventId=' + id
+      });
+    });
+};
+
 // Update a(n) eventTimeslot by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
