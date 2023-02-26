@@ -7,24 +7,19 @@ module.exports = (sequelize, Sequelize) => {
       unique: true,
     },
     fName: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      type: Sequelize.STRING
     },
     lName: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      type: Sequelize.STRING
     },
     nationality: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      type: Sequelize.STRING
     },
     dateOfBirth: {
-      type: Sequelize.DATEONLY,
-      allowNull: false
+      type: Sequelize.STRING
     },
     dateOfDeath: {
-      type: Sequelize.DATEONLY,
-      allowNull: false,
+      type: Sequelize.STRING
     },
   },
   {

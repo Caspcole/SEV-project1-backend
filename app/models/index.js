@@ -58,7 +58,7 @@ db.evaluationComment.belongsTo(db.evaluation,{as: "evaluation"},{foreignKey: {al
 db.event.belongsTo(db.semester,{as: "semester"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //EventTimeslot FKs
-db.eventTimeslot.belongsTo(db.userRole,{as: "accompanist"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.eventTimeslot.belongsTo(db.userRole,{as: "accompanist"});
 db.eventTimeslot.belongsTo(db.event,{as: "event"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //Repertoire FKs
@@ -72,9 +72,9 @@ db.song.belongsTo(db.composer, {as: "composer"},{foreignKey: {allowNull: false }
 db.songTranslation.belongsTo(db.song,{as: "song"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //StudentInstrument FKs
-db.studentInstrument.belongsTo(db.user,{as: "student"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentInstrument.belongsTo(db.userRole,{as: "student"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 db.studentInstrument.belongsTo(db.instrument,{as: "instrument"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
-db.studentInstrument.belongsTo(db.userRole,{as: "accompanist"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
+db.studentInstrument.belongsTo(db.userRole,{as: "accompanist"});
 db.studentInstrument.belongsTo(db.userRole,{as: "instructor"},{foreignKey: {allowNull: false }, onDelete: "CASCADE"});
 
 //StudentTimeslot FKs

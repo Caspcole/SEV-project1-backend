@@ -15,11 +15,6 @@ exports.create = (req, res) => {
       message: "instrumentId can not be empty!"
     });
     return;
-  } else if (!req.body.accompanistId) {
-    res.status(400).send({
-      message: "accompanistId can not be empty!"
-    });
-    return;
   } else if (!req.body.instructorId) {
     res.status(400).send({
       message: "instructorId can not be empty!"
