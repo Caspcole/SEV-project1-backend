@@ -4,33 +4,6 @@ const Composer = db.composer;
 
 // Create and Save a new composer
 exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.fName) {
-    res.status(400).send({
-      message: "first name can not be empty!"
-    });
-    return;
-  } else if (!req.body.lName) {
-    res.status(400).send({
-      message: "last name time can not be empty!"
-    });
-    return;
-  } else if (!req.body.nationality) {
-    res.status(400).send({
-      message: "nationality can not be empty!"
-    });
-    return;
-  } else if (!req.body.dateOfBirth) {
-    res.status(400).send({
-      message: "date of birth can not be empty!"
-    });
-    return;
-  } else if (!req.body.dateOfDeath) {
-    res.status(400).send({
-      message: "date of death can not be empty!"
-    });
-    return;
-  }
   
   const composer = {
     fName: req.body.fName,

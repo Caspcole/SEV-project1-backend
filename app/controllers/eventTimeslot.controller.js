@@ -1,6 +1,6 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const eventTimeslot = db.eventTimeslot;
+const EventTimeslot = db.eventTimeslot;
 
 // Create and Save a new eventTimeslot
 exports.create = (req, res) => {
@@ -15,11 +15,6 @@ exports.create = (req, res) => {
       message: "end time can not be empty!"
     });
     return;
-  } else if (!req.body.accompanistId) {
-    res.status(400).send({
-      message: "accompanistId can not be empty!"
-    });
-    return;
   } else if (!req.body.eventId) {
     res.status(400).send({
       message: "eventId can not be empty!"
@@ -28,7 +23,6 @@ exports.create = (req, res) => {
   }
   
   const eventTimeslot = {
-    type: req.body.type,
     startTime: req.body.startTime,
     endTime: req.body.endTime,
     hasPassed: req.body.hasPassed,
@@ -38,7 +32,7 @@ exports.create = (req, res) => {
   };
 
   // Create and Save a new eventTimeslot
-  eventTimeslot.create(eventTimeslot)
+  EventTimeslot.create(eventTimeslot)
     .then(data => {
       res.send(data);
     })
@@ -52,7 +46,7 @@ exports.create = (req, res) => {
 
 // Retrieve all eventTimeslots from the database
 exports.findAll = (req, res) => {
-  eventTimeslot.findAll()
+  EventTimeslot.findAll()
     .then(data => {
       res.send(data);
     })
@@ -67,7 +61,7 @@ exports.findAll = (req, res) => {
 // Retrieve a(n) eventTimeslot by id
 exports.findById = (req, res) => {
   const id = req.params.id;
-  eventTimeslot.findByPk(id)
+  EventTimeslot.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -84,10 +78,34 @@ exports.findById = (req, res) => {
     });
 };
 
+// Retrieve a(n) eventTimeslot by id
+exports.findByEventId = (req, res) => {
+  const id = req.params.id;
+  EventTimeslot.findAll({
+    where: {
+      eventId: id
+    }
+  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: 'Cannot find eventTimeslots with EventId=' + id
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: 'Error retrieving eventTimeslot with EventId=' + id
+      });
+    });
+};
+
 // Update a(n) eventTimeslot by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  eventTimeslot.update(req.body, {
+  EventTimeslot.update(req.body, {
     where: { id: id }
   })
   .then(num => {
@@ -111,7 +129,7 @@ exports.update = (req, res) => {
 // Delete a(n) eventTimeslot with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  eventTimeslot.destroy({
+  EventTimeslot.destroy({
     where: { id: id }
   })
   .then(num => {
@@ -134,7 +152,7 @@ exports.delete = (req, res) => {
 
 // Delete all eventTimeslots from the database.
 exports.deleteAll = (req, res) => {
-  eventTimeslot.destroy({
+  EventTimeslot.destroy({
     where: {},
     truncate: false,
   })
