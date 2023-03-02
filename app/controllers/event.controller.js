@@ -184,3 +184,30 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+exports.getCritiquesByEventId = (req, res) => {
+  Event.findAll({
+    where: {
+      id: { [Op.eq]: req.params.id },
+    },
+    include: {
+      model: db.eventTimeslot,
+      required: false,
+      // attributes: ["id"],
+      include: {
+        model: db.studentTimeslot,
+        required: true,
+        // attributes: ["id"],
+      },
+    },
+    // attributes: ["id"],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};
