@@ -17,7 +17,7 @@ module.exports = (app) => {
   // Delete all events
   router.delete("/", event.deleteAll);
   // Retrieve critiques by event id
-  router.get("/id/critiques", event.getCritiquesByEventId);
+  router.get("/:id/critiques", event.getCritiquesByEventId);
 
   app.use("/performance-t2/event", router);
 };

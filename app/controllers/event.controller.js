@@ -190,17 +190,50 @@ exports.getCritiquesByEventId = (req, res) => {
     where: {
       id: { [Op.eq]: req.params.id },
     },
+    attributes: ["id"],
     include: {
       model: db.eventTimeslot,
-      required: false,
-      // attributes: ["id"],
+      required: true,
+      attributes: ["id"],
       include: {
         model: db.studentTimeslot,
         required: true,
-        // attributes: ["id"],
+        attributes: ["id"],
+        include: [
+          {
+            model: db.critique,
+            required: true,
+            attributes: ["id", "type", "grade", "comment"],
+            include: {
+              model: db.userRole,
+              required: true,
+              attributes: ["id", "title"],
+              include: {
+                model: db.user,
+                required: true,
+                attributes: ["id", "fName", "lName"],
+              },
+            },
+          },
+          {
+            model: db.studentInstrument,
+            required: true,
+            attributes: ["id", "studentId", "instrumentId"],
+            include: {
+              model: db.userRole,
+              required: true,
+              as: "student",
+              attributes: ["id", "title"],
+              include: {
+                model: db.user,
+                required: true,
+                attributes: ["id", "fName", "lName"],
+              },
+            },
+          },
+        ],
       },
     },
-    // attributes: ["id"],
   })
     .then((data) => {
       res.send(data);

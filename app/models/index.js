@@ -53,158 +53,171 @@ db.evaluationComment = require("./evaluationComment.model.js")(
 );
 
 //Availability FKs
-db.availability.belongsTo(
-  db.user,
-  { as: "user" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.user.hasMany(db.availability);
+db.user.hasMany(db.availability, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.availability.belongsTo(db.user);
 
 //Critique FKs
-db.critique.belongsTo(
-  db.userRole,
-  { as: "critiquer" },
-  { foreignKey: { name: "critiquer", allowNull: false }, onDelete: "CASCADE" }
-);
-db.userRole.hasMany(db.critique);
-db.critique.belongsTo(
-  db.studentTimeslot,
-  { as: "timeslot" },
-  { foreignKey: { name: "timeslot", allowNull: false }, onDelete: "CASCADE" }
-);
-db.studentTimeslot.hasMany(db.critique);
+db.userRole.hasMany(db.critique, {
+  foreignKey: { name: "critiquerId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.studentTimeslot.hasMany(db.critique, {
+  foreignKey: { name: "timeslotId", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.critique.belongsTo(db.userRole, {
+  foreignKey: { name: "critiquerId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.critique.belongsTo(db.studentTimeslot, {
+  foreignKey: { name: "timeslotId", allowNull: false },
+  onDelete: "CASCADE",
+});
 
 //Evaluation FKs
-db.evaluation.belongsTo(
-  db.userRole,
-  { as: "faculty" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.userRole.hasMany(db.evaluation);
-db.evaluation.belongsTo(
-  db.studentInstrument,
-  { as: "student" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.studentInstrument.hasMany(db.evaluation);
+db.userRole.hasMany(db.evaluation, {
+  foreignKey: { name: "facultyId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.studentInstrument.hasMany(db.evaluation, {
+  foreignKey: { name: "studentId", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.evaluation.belongsTo(db.userRole, {
+  foreignKey: { name: "facultyId" },
+});
+db.evaluation.belongsTo(db.studentInstrument, {
+  foreignKey: { name: "studentId" },
+});
 
 //EvaluationComment FKs
-db.evaluationComment.belongsTo(
-  db.evaluation,
-  { as: "evaluation" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.evaluation.hasMany(db.evaluationComment);
+db.evaluation.hasMany(db.evaluationComment, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.evaluationComment.belongsTo(db.evaluation);
 
 //Event FKs
-db.event.belongsTo(
-  db.semester,
-  { as: "semester" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.semester.hasMany(db.event);
+db.semester.hasMany(db.event, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.event.belongsTo(db.semester);
 
 //EventTimeslot FKs
-db.eventTimeslot.belongsTo(db.userRole, { as: "accompanist" });
-db.userRole.hasMany(db.eventTimeslot);
-db.eventTimeslot.belongsTo(
-  db.event,
-  { as: "event" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.eventTimeslot.hasMany(db.eventTimeslot);
+db.userRole.hasMany(db.eventTimeslot, {
+  foreignKey: { name: "accompanistId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.event.hasMany(db.eventTimeslot);
+
+db.eventTimeslot.belongsTo(db.userRole, {
+  foreignKey: { name: "accompanistId" },
+});
+db.eventTimeslot.belongsTo(db.event);
 
 //Repertoire FKs
-db.repertoire.belongsTo(
-  db.studentInstrument,
-  { as: "studentInstrument" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.studentInstrument.hasMany(db.repertoire);
-db.repertoire.belongsTo(
-  db.song,
-  { as: "song" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.song.hasMany(db.repertoire);
+db.studentInstrument.hasMany(db.repertoire, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.song.hasMany(db.repertoire, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.repertoire.belongsTo(db.studentInstrument);
+db.repertoire.belongsTo(db.song);
 
 //Song FKs
-db.song.belongsTo(
-  db.composer,
-  { as: "composer" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.composer.hasMany(db.song);
+db.composer.hasMany(db.song, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.song.belongsTo(db.composer);
 
 //SongTranslation FKs
-db.songTranslation.belongsTo(
-  db.song,
-  { as: "song" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.song.hasMany(db.songTranslation);
+db.song.hasMany(db.songTranslation, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.songTranslation.belongsTo(db.song);
 
 //StudentInstrument FKs
-db.studentInstrument.belongsTo(
-  db.userRole,
-  { as: "student" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.userRole.hasMany(db.studentInstrument);
-db.studentInstrument.belongsTo(
-  db.instrument,
-  { as: "instrument" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.instrument.hasMany(db.studentInstrument);
+db.userRole.hasMany(db.studentInstrument, {
+  as: "student",
+  foreignKey: { name: "studentId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.instrument.hasMany(db.studentInstrument, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.userRole.hasMany(db.studentInstrument, {
+  as: "accompanist",
+  foreignKey: { name: "accompanistId" },
+});
+db.userRole.hasMany(db.studentInstrument, {
+  as: "instructor",
+  foreignKey: { name: "instructorId", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.studentInstrument.belongsTo(db.userRole, { as: "student" });
+db.studentInstrument.belongsTo(db.userRole, { as: "instructor" });
 db.studentInstrument.belongsTo(db.userRole, { as: "accompanist" });
-db.userRole.hasMany(db.instrument);
-db.studentInstrument.belongsTo(
-  db.userRole,
-  { as: "instructor" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
+db.studentInstrument.belongsTo(db.instrument);
 
 //StudentTimeslot FKs
-db.studentTimeslot.belongsTo(
-  db.studentInstrument,
-  { as: "studentInstrument" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.studentInstrument.hasMany(db.studentTimeslot);
-db.studentTimeslot.belongsTo(
-  db.eventTimeslot,
-  { as: "eventTimeslot" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.eventTimeslot.hasMany(db.studentTimeslot);
-db.studentTimeslot.belongsTo(
-  db.userRole,
-  { as: "instructor" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.userRole.hasMany(db.studentTimeslot);
+db.studentInstrument.hasMany(db.studentTimeslot, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.eventTimeslot.hasMany(db.studentTimeslot, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.userRole.hasMany(db.studentTimeslot, {
+  foreignKey: { name: "instructorId", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.studentTimeslot.belongsTo(db.studentInstrument);
+db.studentTimeslot.belongsTo(db.eventTimeslot);
+db.studentTimeslot.belongsTo(db.userRole, {
+  foreignKey: { name: "instructorId" },
+});
 
 //TimeslotSong KFs
-db.timeslotSong.belongsTo(
-  db.studentTimeslot,
-  { as: "timeslot" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.studentTimeslot.hasMany(db.timeslotSong);
-db.timeslotSong.belongsTo(
-  db.song,
-  { as: "song" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.song.hasMany(db.timeslotSong);
+db.studentTimeslot.hasMany(db.timeslotSong, {
+  foreignKey: { name: "timeslotId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.song.hasMany(db.timeslotSong, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.timeslotSong.belongsTo(db.studentTimeslot, {
+  foreignKey: { name: "timeslotId" },
+});
+db.timeslotSong.belongsTo(db.song);
 
 //UserRole FKs
-db.userRole.belongsTo(
-  db.user,
-  { as: "user" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.user.hasMany(db.userRole);
+db.user.hasMany(db.userRole, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.userRole.belongsTo(db.user);
 
 module.exports = db;
