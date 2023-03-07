@@ -2,7 +2,6 @@ const db = require("../models");
 const authconfig = require("../config/auth.config");
 const User = db.user;
 const Session = db.session;
-const Op = db.Sequelize.Op;
 
 const { google } = require("googleapis");
 
@@ -32,29 +31,6 @@ exports.login = async (req, res) => {
   let email = googleUser.email;
   let firstName = googleUser.given_name;
   let lastName = googleUser.family_name;
-
-  // if we don't have their email or name, we need to make another request
-  // this is solely for testing purposes
-  if (
-    (email === undefined ||
-      firstName === undefined ||
-      lastName === undefined) &&
-    req.body.accessToken !== undefined
-  ) {
-    let oauth2Client = new OAuth2Client(google_id); // create new auth client
-    oauth2Client.setCredentials({ access_token: req.body.accessToken }); // use the new auth client with the access_token
-    let oauth2 = google.oauth2({
-      auth: oauth2Client,
-      version: "v2",
-    });
-    let { data } = await oauth2.userinfo.get(); // get user info
-    console.log(data);
-    email = data.email;
-    firstName = data.given_name;
-    lastName = data.family_name;
-  }
-
-  console.log(lastName);
 
   let user = {};
   let session = {};
@@ -119,7 +95,7 @@ exports.login = async (req, res) => {
   await Session.findOne({
     where: {
       email: email,
-      token: { [Op.ne]: "" },
+      token: googleToken,
     },
   })
     .then(async (data) => {
