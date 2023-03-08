@@ -218,25 +218,101 @@ exports.getCritiquesByEventId = (req, res) => {
           {
             model: db.studentInstrument,
             required: true,
-            attributes: ["id", "studentId", "instrumentId"],
-            include: {
-              model: db.userRole,
-              required: true,
-              as: "student",
-              attributes: ["id", "title"],
-              include: {
-                model: db.user,
+            attributes: ["id", "studentId"],
+            include: [
+              {
+                model: db.userRole,
                 required: true,
-                attributes: ["id", "fName", "lName"],
+                as: "student",
+                attributes: ["id", "title"],
+                include: {
+                  model: db.user,
+                  required: true,
+                  attributes: ["id", "fName", "lName"],
+                },
               },
-            },
+              {
+                model: db.instrument,
+                required: true,
+                attributes: ["id", "name"],
+              },
+            ],
           },
         ],
       },
     },
   })
     .then((data) => {
-      res.send(data);
+      data = data[0].dataValues;
+      let text = "[";
+      //for each event timeslot
+      for (let etI = 0; etI < data.eventTimeslots.length; etI++) {
+        let curEventTs = data.eventTimeslots[etI].dataValues;
+        //for each student timeslot
+        for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
+          let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
+          let student = curStudentTs.studentInstrument.dataValues.student;
+          let critiquerArray = [];
+          text +=
+            '{"studentTitle":"' +
+            student.dataValues.title +
+            '","studentFName":"' +
+            student.dataValues.user.dataValues.fName +
+            '","studentLName":"' +
+            student.dataValues.user.dataValues.lName +
+            '","studentInstrument":"';
+          text +=
+            curStudentTs.studentInstrument.dataValues.instrument.dataValues
+              .name + '","critiquers":[';
+          //for each critique
+          for (let cI = 0; cI < curStudentTs.critiques.length; cI++) {
+            let curCritique = curStudentTs.critiques[cI].dataValues;
+            if (critiquerArray.length == 0) {
+              text +=
+                '{"critiquerName":"' +
+                (curCritique.userRole.dataValues.title === null
+                  ? ""
+                  : curCritique.userRole.dataValues.title + " ") +
+                curCritique.userRole.dataValues.user.dataValues.fName +
+                " " +
+                curCritique.userRole.dataValues.user.dataValues.fName +
+                '","comments":[';
+              critiquerArray.push(curCritique.userRole.dataValues.id);
+            } else if (
+              critiquerArray.includes(curCritique.userRole.dataValues.id)
+            ) {
+              //same faculty
+              text += ",";
+            } else {
+              //new faculty
+              critiquerArray.push(curCritique.userRole.dataValues.id);
+              text +=
+                ']},{"critiquerName":"' +
+                (curCritique.userRole.dataValues.title === null
+                  ? ""
+                  : curCritique.userRole.dataValues.title + " ") +
+                curCritique.userRole.dataValues.user.dataValues.fName +
+                " " +
+                curCritique.userRole.dataValues.user.dataValues.fName +
+                '","comments":[';
+            }
+            text +=
+              '{"critiqueTitle":"' +
+              curCritique.type +
+              '","critiqueComment":"' +
+              curCritique.comment +
+              '","critiqueGrade":"' +
+              curCritique.grade +
+              '"}';
+          }
+          text += "]}]}";
+        }
+        if (data.eventTimeslots.length - etI > 1) {
+          text += ",";
+        }
+      }
+      text += "]";
+      res.send(JSON.parse(text));
     })
     .catch((err) => {
       res.status(500).send({
