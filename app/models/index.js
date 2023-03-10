@@ -51,6 +51,7 @@ db.evaluationComment = require("./evaluationComment.model.js")(
   sequelize,
   Sequelize
 );
+db.session = require("./session.model.js")(sequelize, Sequelize);
 
 //Availability FKs
 db.user.hasMany(db.availability, {
