@@ -1,19 +1,20 @@
-module.exports = app => {
-    const userRole = require("../controllers/userRole.controller.js");
-    var router = require("express").Router();
+module.exports = (app) => {
+  const userRole = require("../controllers/userRole.controller.js");
+  const { authenticate } = require("../authorization/authorization.js");
+  var router = require("express").Router();
 
-    // Create a new userRole
-    router.post("/", userRole.create);
-    // Retrieve all userRoles
-    router.get("/", userRole.findAll);
-    // Retrieve a single userRole with id
-    router.get("/:id", userRole.findById);
-    // Update a userRole with id
-    router.put("/:id", userRole.update);
-    // Delete a userRole with id
-    router.delete("/:id", userRole.delete);
-    // Delete all userRoles
-    router.delete("/", userRole.deleteAll);
+  // Create a new userRole
+  router.post("/", [authenticate], userRole.create);
+  // Retrieve all userRoles
+  router.get("/", [authenticate], userRole.findAll);
+  // Retrieve a single userRole with id
+  router.get("/:id", [authenticate], userRole.findById);
+  // Update a userRole with id
+  router.put("/:id", [authenticate], userRole.update);
+  // Delete a userRole with id
+  router.delete("/:id", [authenticate], userRole.delete);
+  // Delete all userRoles
+  router.delete("/", [authenticate], userRole.deleteAll);
 
-    app.use('/performance-t2/userRole', router);
+  app.use("/performance-t2/userRole", router);
 };

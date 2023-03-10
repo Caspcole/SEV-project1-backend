@@ -220,4 +220,12 @@ db.user.hasMany(db.userRole, {
 
 db.userRole.belongsTo(db.user);
 
+//Session FKs
+db.user.hasMany(db.session, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.session.belongsTo(db.user);
+
 module.exports = db;
