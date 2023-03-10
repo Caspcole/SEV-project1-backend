@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -26,7 +27,6 @@ require("./app/routes/eventTimeslot.routes.js")(app);
 require("./app/routes/instrument.routes.js")(app);
 require("./app/routes/repertoire.routes.js")(app);
 require("./app/routes/semester.routes.js")(app);
-// require("./app/routes/session.routes.js")(app);
 require("./app/routes/song.routes.js")(app);
 require("./app/routes/songTranslation.routes.js")(app);
 require("./app/routes/studentInstrument.routes.js")(app);
