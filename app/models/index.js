@@ -51,6 +51,7 @@ db.evaluationComment = require("./evaluationComment.model.js")(
   sequelize,
   Sequelize
 );
+db.session = require("./session.model.js")(sequelize, Sequelize);
 
 //Availability FKs
 db.user.hasMany(db.availability, {
@@ -231,5 +232,11 @@ db.user.hasMany(db.userRole, {
 });
 
 db.userRole.belongsTo(db.user);
+
+//Session FKs
+db.user.hasMany(db.session, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
 
 module.exports = db;
