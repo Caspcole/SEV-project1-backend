@@ -91,7 +91,6 @@ exports.findById = (req, res) => {
 // Retrieve all events from the database from the specified date onwards
 exports.findDateAndAfter = (req, res) => {
   const date = req.params.date;
-  console.log(date);
   Event.findAll({
     where: {
       date: {
@@ -251,15 +250,16 @@ exports.getCritiquesByEventId = (req, res) => {
         //for each student timeslot
         for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
           let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
-          let student = curStudentTs.studentInstrument.dataValues.student;
+          let student =
+            curStudentTs.studentInstrument.dataValues.student.dataValues;
           let critiquerArray = [];
           text +=
             '{"studentTitle":"' +
-            student.dataValues.title +
+            student.title +
             '","studentFName":"' +
-            student.dataValues.user.dataValues.fName +
+            student.user.dataValues.fName +
             '","studentLName":"' +
-            student.dataValues.user.dataValues.lName +
+            student.user.dataValues.lName +
             '","studentInstrument":"';
           text +=
             curStudentTs.studentInstrument.dataValues.instrument.dataValues
