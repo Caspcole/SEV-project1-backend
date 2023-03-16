@@ -1,5 +1,6 @@
 const db = require("../models");
 const { Op } = require("sequelize");
+const { event } = require("../models");
 const Event = db.event;
 
 // Create and Save a new event
@@ -181,6 +182,112 @@ exports.deleteAll = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Some error occurred while removing all event.",
+      });
+    });
+};
+
+exports.getStudentTimeslotsForCurrentDate = (req, res) => {
+  Event.findAll({
+    where: {
+      date: { [Op.eq]: req.params.date },
+    },
+    attributes: ["id", "type", "date"],
+    include: {
+      model: db.eventTimeslot,
+      required: false /*false for Left Outer -debug use*/,
+      attributes: ["id", "startTime", "endTime"],
+      include: {
+        model: db.studentTimeslot,
+        required: true,
+        attributes: ["id"],
+        include: {
+          model: db.studentInstrument,
+          required: true,
+          attributes: ["id"],
+          include: [
+            {
+              model: db.instrument,
+              required: true,
+              attributes: ["id", "name", "type"],
+            },
+            {
+              model: db.userRole,
+              required: true,
+              as: "student",
+              attributes: ["id"],
+              include: {
+                model: db.user,
+                required: true,
+                attributes: ["id", "fName", "lName"],
+              },
+            },
+          ],
+        },
+      },
+    },
+  })
+    // .then((data) => {
+    //   res.send(data);
+    // })
+    .then((data) => {
+      data = data[0].dataValues;
+      let text = "[";
+      // for each event
+      // for (let eI = 0; eI < data.event.length; eI++) {
+      //   let curEvent = data.event[eI].dataValues;
+      //   let event = curEvent.event.dataValues.event;
+
+      //   text +=
+      //     '{"eventType":"' +
+      //     event.dataValues.event.dataValues.type +
+      //     '","date":"' +
+      //     event.dataValues.event.dataValues.date +
+      //     '"}';
+      //for each event timeslot
+      for (let etI = 0; etI < data.eventTimeslots.length; etI++) {
+        let curEventTs = data.eventTimeslots[etI].dataValues;
+        let studentArray = [];
+
+        text += '{"students":['
+        //for each student timeslot
+        for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
+          let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
+          let student = curStudentTs.studentInstrument.dataValues.student;
+          if (studentArray.length == 0) {
+            text +=
+              '{"studentFName":"' +
+              student.dataValues.user.dataValues.fName +
+              '","studentLName":"' +
+              student.dataValues.user.dataValues.lName +
+              '","studentInstrument":"';
+            text +=
+              curStudentTs.studentInstrument.dataValues.instrument.dataValues
+                .name + '"},';
+          }
+          else {
+            studentArray.push(student)
+            text +=
+              '{"studentFName":"' +
+              student.dataValues.user.dataValues.fName +
+              '","studentLName":"' +
+              student.dataValues.user.dataValues.lName +
+              '","studentInstrument":"';
+            text +=
+              curStudentTs.studentInstrument.dataValues.instrument.dataValues
+                .name + '"},';
+          }
+          //check for .dataValue inefficieny later
+          res.send(JSON.parse(text));
+        }
+        if (data.eventTimeslots.length - etI > 1) {
+          text += ",";
+      }
+      // }
+    text += "]";
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
       });
     });
 };

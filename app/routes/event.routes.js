@@ -1,22 +1,28 @@
 module.exports = (app) => {
   const event = require("../controllers/event.controller.js");
-  const { authenticate } = require("../authorization/authorization.js");
+  //const { authenticate } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
   // Create a new event
-  router.post("/", [authenticate], event.create);
+  router.post("/", event.create);
   // Retrieve all events
-  router.get("/", [authenticate], event.findAll);
+  router.get("/", event.findAll);
   // Retrieve a single event with id
-  router.get("/:id", [authenticate], event.findById);
+  router.get("/:id", event.findById);
   // Retrieve all events with date after date
-  router.get("/date/:date", [authenticate], event.findDateAndAfter);
+  router.get("/date/:date", event.findDateAndAfter);
   // Update a event with id
-  router.put("/:id", [authenticate], event.update);
+  router.put("/:id", event.update);
   // Delete a event with id
-  router.delete("/:id", [authenticate], event.delete);
+  router.delete("/:id", event.delete);
   // Delete all events
-  router.delete("/", [authenticate], event.deleteAll);
+  router.delete("/", event.deleteAll);
+  // Retrieve timeslots fore current date
+  router.get(
+    "/critiqueTimeslots/:date",
+    event.getStudentTimeslotsForCurrentDate
+  );
 
+  //REMEMBER TO RE ADD THE ", [authenticate],"
   app.use("/performance-t2/event", router);
 };
