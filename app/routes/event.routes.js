@@ -17,8 +17,12 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], event.delete);
   // Delete all events
   router.delete("/", [authenticate], event.deleteAll);
-  // Retrieve critiques by event id
-  router.get("/:id/critiques", event.getCritiquesByEventId);
+  // Retrieve critiques by semester id
+  router.get(
+    "/semesterCritiques/:semesterId",
+    [authenticate],
+    event.getEventCritiquesBySemesterId
+  );
 
   app.use("/performance-t2/event", router);
 };

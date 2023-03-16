@@ -184,12 +184,12 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-exports.getCritiquesByEventId = (req, res) => {
+exports.getEventCritiquesBySemesterId = (req, res) => {
   Event.findAll({
     where: {
-      id: { [Op.eq]: req.params.id },
+      semesterId: { [Op.eq]: req.params.semesterId },
     },
-    attributes: ["id"],
+    attributes: ["id", "date", "type"],
     include: {
       model: db.eventTimeslot,
       required: true,
@@ -242,73 +242,80 @@ exports.getCritiquesByEventId = (req, res) => {
     },
   })
     .then((data) => {
-      data = data[0].dataValues;
       let text = "[";
-      //for each event timeslot
-      for (let etI = 0; etI < data.eventTimeslots.length; etI++) {
-        let curEventTs = data.eventTimeslots[etI].dataValues;
-        //for each student timeslot
-        for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
-          let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
-          let student =
-            curStudentTs.studentInstrument.dataValues.student.dataValues;
-          let critiquerArray = [];
-          text +=
-            '{"studentTitle":"' +
-            student.title +
-            '","studentFName":"' +
-            student.user.dataValues.fName +
-            '","studentLName":"' +
-            student.user.dataValues.lName +
-            '","studentInstrument":"';
-          text +=
-            curStudentTs.studentInstrument.dataValues.instrument.dataValues
-              .name + '","critiquers":[';
-          //for each critique
-          for (let cI = 0; cI < curStudentTs.critiques.length; cI++) {
-            let curCritique = curStudentTs.critiques[cI].dataValues;
-            if (critiquerArray.length == 0) {
-              text +=
-                '{"critiquerName":"' +
-                (curCritique.userRole.dataValues.title === null
-                  ? ""
-                  : curCritique.userRole.dataValues.title + " ") +
-                curCritique.userRole.dataValues.user.dataValues.fName +
-                " " +
-                curCritique.userRole.dataValues.user.dataValues.fName +
-                '","comments":[';
-              critiquerArray.push(curCritique.userRole.dataValues.id);
-            } else if (
-              critiquerArray.includes(curCritique.userRole.dataValues.id)
-            ) {
-              //same faculty
-              text += ",";
-            } else {
-              //new faculty
-              critiquerArray.push(curCritique.userRole.dataValues.id);
-              text +=
-                ']},{"critiquerName":"' +
-                (curCritique.userRole.dataValues.title === null
-                  ? ""
-                  : curCritique.userRole.dataValues.title + " ") +
-                curCritique.userRole.dataValues.user.dataValues.fName +
-                " " +
-                curCritique.userRole.dataValues.user.dataValues.fName +
-                '","comments":[';
-            }
+      //for each event
+      for (let eI = 0; eI < data.length; eI++) {
+        let curEvent = data[eI].dataValues;
+        //for each event timeslot
+        for (let etI = 0; etI < curEvent.eventTimeslots.length; etI++) {
+          let curEventTs = curEvent.eventTimeslots[etI].dataValues;
+          //for each student timeslot
+          for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
+            let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
+            let student =
+              curStudentTs.studentInstrument.dataValues.student.dataValues;
+            let critiquerArray = [];
             text +=
-              '{"critiqueTitle":"' +
-              curCritique.type +
-              '","critiqueComment":"' +
-              curCritique.comment +
-              '","critiqueGrade":"' +
-              curCritique.grade +
-              '"}';
+              '{"eventDate":"' +
+              curEvent.date +
+              '","eventType":"' +
+              curEvent.type +
+              '","studentTitle":"' +
+              student.title +
+              '","studentFName":"' +
+              student.user.dataValues.fName +
+              '","studentLName":"' +
+              student.user.dataValues.lName +
+              '","studentInstrument":"';
+            text +=
+              curStudentTs.studentInstrument.dataValues.instrument.dataValues
+                .name + '","critiquers":[';
+            //for each critique
+            for (let cI = 0; cI < curStudentTs.critiques.length; cI++) {
+              let curCritique = curStudentTs.critiques[cI].dataValues;
+              if (critiquerArray.length == 0) {
+                text +=
+                  '{"critiquerName":"' +
+                  (curCritique.userRole.dataValues.title === null
+                    ? ""
+                    : curCritique.userRole.dataValues.title + " ") +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  " " +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  '","comments":[';
+                critiquerArray.push(curCritique.userRole.dataValues.id);
+              } else if (
+                critiquerArray.includes(curCritique.userRole.dataValues.id)
+              ) {
+                //same faculty
+                text += ",";
+              } else {
+                //new faculty
+                critiquerArray.push(curCritique.userRole.dataValues.id);
+                text +=
+                  ']},{"critiquerName":"' +
+                  (curCritique.userRole.dataValues.title === null
+                    ? ""
+                    : curCritique.userRole.dataValues.title + " ") +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  " " +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  '","comments":[';
+              }
+              text +=
+                '{"critiqueTitle":"' +
+                curCritique.type +
+                '","critiqueComment":"' +
+                curCritique.comment +
+                '","critiqueGrade":"' +
+                curCritique.grade +
+                '"}';
+            }
+            text += "]}]}";
           }
-          text += "]}]}";
-        }
-        if (data.eventTimeslots.length - etI > 1) {
-          text += ",";
+          if (curEvent.eventTimeslots.length - etI > 1) {
+            text += ",";
+          }
         }
       }
       text += "]";
