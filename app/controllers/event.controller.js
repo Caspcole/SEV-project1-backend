@@ -230,60 +230,63 @@ exports.getStudentTimeslotsForCurrentDate = (req, res) => {
     //   res.send(data);
     // })
     .then((data) => {
-      data = data[0].dataValues;
       let text = "[";
-      // for each event
-      // for (let eI = 0; eI < data.event.length; eI++) {
-      //   let curEvent = data.event[eI].dataValues;
-      //   let event = curEvent.event.dataValues.event;
-
-      //   text +=
-      //     '{"eventType":"' +
-      //     event.dataValues.event.dataValues.type +
-      //     '","date":"' +
-      //     event.dataValues.event.dataValues.date +
-      //     '"}';
-      //for each event timeslot
-      for (let etI = 0; etI < data.eventTimeslots.length; etI++) {
-        let curEventTs = data.eventTimeslots[etI].dataValues;
-        let studentArray = [];
-
-        text += '{"students":['
-        //for each student timeslot
-        for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
-          let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
-          let student = curStudentTs.studentInstrument.dataValues.student;
-          if (studentArray.length == 0) {
+      for (let eI = 0; eI < data.length; eI++) {
+        let curEvent = data[eI].dataValues;
+        text +=
+          '{"eventId":"' +
+          curEvent.id +
+          '","eventType":"' +
+          curEvent.type +
+          '","eventDate":"' +
+          curEvent.date +
+          '","timeslots":[';
+        for (let etI = 0; etI < curEvent.eventTimeslots.length; etI++) {
+          let curEventTs = curEvent.eventTimeslots[etI].dataValues;
+          text +=
+            '{"timeslotId":"' +
+            curEventTs.id +
+            '","startTime":"' +
+            curEventTs.startTime +
+            '","endTime":"' +
+            curEventTs.endTime +
+            '","students":[';
+          for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
+            let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
+            let student = curStudentTs.studentInstrument.dataValues.student;
             text +=
-              '{"studentFName":"' +
+              '{"studentId":"' +
+              student.dataValues.user.dataValues.id +
+              '","fName":"' +
               student.dataValues.user.dataValues.fName +
-              '","studentLName":"' +
+              '","lName":"' +
               student.dataValues.user.dataValues.lName +
-              '","studentInstrument":"';
-            text +=
+              '","instrumentName":"' +
               curStudentTs.studentInstrument.dataValues.instrument.dataValues
-                .name + '"},';
-          }
-          else {
-            studentArray.push(student)
-            text +=
-              '{"studentFName":"' +
-              student.dataValues.user.dataValues.fName +
-              '","studentLName":"' +
-              student.dataValues.user.dataValues.lName +
-              '","studentInstrument":"';
-            text +=
+                .name +
+              '","instrumentType":"' +
               curStudentTs.studentInstrument.dataValues.instrument.dataValues
-                .name + '"},';
+                .type +
+              '"}';
+            if (curEventTs.studentTimeslots.length - stI > 1) {
+              text += ",";
+            }
+            text += "]}";
           }
-          //check for .dataValue inefficieny later
-          res.send(JSON.parse(text));
+          if (curEvent.eventTimeslots.length - etI > 1) {
+            text += ",";
+          }
         }
-        if (data.eventTimeslots.length - etI > 1) {
+        // text += "]}]}";
+        text += "]}";
+        if (data.length - eI > 1) {
           text += ",";
+        }
       }
-      // }
-    text += "]";
+      text += "]";
+      res.send(JSON.parse(text));
+      // res.send(text);
+      // res.send();
     })
     .catch((err) => {
       res.status(500).send({
