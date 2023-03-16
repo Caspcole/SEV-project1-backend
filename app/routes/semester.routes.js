@@ -15,6 +15,8 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], semester.delete);
   // Delete all semesters
   router.delete("/", [authenticate], semester.deleteAll);
+  // Get current semester
+  router.get("/date/:date", [authenticate], semester.getSemesterByDate);
 
   app.use("/performance-t2/semester", router);
 };
