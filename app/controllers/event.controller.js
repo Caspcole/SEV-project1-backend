@@ -297,7 +297,7 @@ exports.getEventCritiquesBySemesterId = (req, res) => {
                     : curCritique.userRole.dataValues.title + " ") +
                   curCritique.userRole.dataValues.user.dataValues.fName +
                   " " +
-                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  curCritique.userRole.dataValues.user.dataValues.lName +
                   '","comments":[';
                 critiquerArray.push(curCritique.userRole.dataValues.id);
               } else if (
