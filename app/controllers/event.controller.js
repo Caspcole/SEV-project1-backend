@@ -91,7 +91,6 @@ exports.findById = (req, res) => {
 // Retrieve all events from the database from the specified date onwards
 exports.findDateAndAfter = (req, res) => {
   const date = req.params.date;
-  console.log(date);
   Event.findAll({
     where: {
       date: {
@@ -181,6 +180,169 @@ exports.deleteAll = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Some error occurred while removing all event.",
+      });
+    });
+};
+
+exports.getEventCritiquesBySemesterId = (req, res) => {
+  const months = [
+    "January",
+    "Febuary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  Event.findAll({
+    where: {
+      semesterId: { [Op.eq]: req.params.semesterId },
+    },
+    attributes: ["id", "date", "type"],
+    include: {
+      model: db.eventTimeslot,
+      required: true,
+      attributes: ["id"],
+      include: {
+        model: db.studentTimeslot,
+        required: true,
+        attributes: ["id"],
+        include: [
+          {
+            model: db.critique,
+            required: true,
+            attributes: ["id", "type", "grade", "comment"],
+            include: {
+              model: db.userRole,
+              required: true,
+              attributes: ["id", "title"],
+              include: {
+                model: db.user,
+                required: true,
+                attributes: ["id", "fName", "lName"],
+              },
+            },
+          },
+          {
+            model: db.studentInstrument,
+            required: true,
+            attributes: ["id", "studentId"],
+            include: [
+              {
+                model: db.userRole,
+                required: true,
+                as: "student",
+                attributes: ["id", "title"],
+                include: {
+                  model: db.user,
+                  required: true,
+                  attributes: ["id", "fName", "lName"],
+                },
+              },
+              {
+                model: db.instrument,
+                required: true,
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  })
+    .then((data) => {
+      let text = "[";
+      //for each event
+      for (let eI = 0; eI < data.length; eI++) {
+        let curEvent = data[eI].dataValues;
+        //for each event timeslot
+        for (let etI = 0; etI < curEvent.eventTimeslots.length; etI++) {
+          let curEventTs = curEvent.eventTimeslots[etI].dataValues;
+          //for each student timeslot
+          for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
+            let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
+            let student =
+              curStudentTs.studentInstrument.dataValues.student.dataValues;
+            let critiquerArray = [];
+            text +=
+              '{"eventDate":"' +
+              months[Number(curEvent.date.substring(5, 7) - 1)] +
+              " " +
+              curEvent.date.substring(8) +
+              '","eventType":"' +
+              curEvent.type +
+              '","studentTitle":"' +
+              student.title +
+              '","studentFName":"' +
+              student.user.dataValues.fName +
+              '","studentLName":"' +
+              student.user.dataValues.lName +
+              '","studentInstrument":"';
+            text +=
+              curStudentTs.studentInstrument.dataValues.instrument.dataValues
+                .name + '","critiquers":[';
+            //for each critique
+            for (let cI = 0; cI < curStudentTs.critiques.length; cI++) {
+              let curCritique = curStudentTs.critiques[cI].dataValues;
+              if (critiquerArray.length == 0) {
+                text +=
+                  '{"critiquerName":"' +
+                  (curCritique.userRole.dataValues.title === null
+                    ? ""
+                    : curCritique.userRole.dataValues.title + " ") +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  " " +
+                  curCritique.userRole.dataValues.user.dataValues.lName +
+                  '","comments":[';
+                critiquerArray.push(curCritique.userRole.dataValues.id);
+              } else if (
+                critiquerArray.includes(curCritique.userRole.dataValues.id)
+              ) {
+                //same faculty
+                text += ",";
+              } else {
+                //new faculty
+                critiquerArray.push(curCritique.userRole.dataValues.id);
+                text +=
+                  ']},{"critiquerName":"' +
+                  (curCritique.userRole.dataValues.title === null
+                    ? ""
+                    : curCritique.userRole.dataValues.title + " ") +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  " " +
+                  curCritique.userRole.dataValues.user.dataValues.fName +
+                  '","comments":[';
+              }
+              text +=
+                '{"critiqueTitle":"' +
+                curCritique.type +
+                '","critiqueComment":"' +
+                curCritique.comment +
+                '","critiqueGrade":"' +
+                curCritique.grade +
+                '"}';
+            }
+            text += "]}]}";
+          }
+          if (curEvent.eventTimeslots.length - etI > 1) {
+            text += ",";
+          }
+        }
+        if (data.length - eI > 1) {
+          text += ",";
+        }
+      }
+      text += "]";
+      res.send(JSON.parse(text));
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
       });
     });
 };
