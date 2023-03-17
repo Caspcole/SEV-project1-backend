@@ -185,6 +185,20 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.getEventCritiquesBySemesterId = (req, res) => {
+  const months = [
+    "January",
+    "Febuary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   Event.findAll({
     where: {
       semesterId: { [Op.eq]: req.params.semesterId },
@@ -257,7 +271,9 @@ exports.getEventCritiquesBySemesterId = (req, res) => {
             let critiquerArray = [];
             text +=
               '{"eventDate":"' +
-              curEvent.date +
+              months[Number(curEvent.date.substring(5, 7) - 1)] +
+              " " +
+              curEvent.date.substring(8) +
               '","eventType":"' +
               curEvent.type +
               '","studentTitle":"' +
@@ -316,6 +332,9 @@ exports.getEventCritiquesBySemesterId = (req, res) => {
           if (curEvent.eventTimeslots.length - etI > 1) {
             text += ",";
           }
+        }
+        if (data.length - eI > 1) {
+          text += ",";
         }
       }
       text += "]";
