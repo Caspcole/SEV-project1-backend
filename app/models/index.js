@@ -62,12 +62,8 @@ db.user.hasMany(db.availability, {
 db.availability.belongsTo(db.user);
 
 //Critique FKs
-db.userRole.hasMany(db.critique, {
-  foreignKey: { name: "critiquerId", allowNull: false },
-  onDelete: "CASCADE",
-});
 db.studentTimeslot.hasMany(db.critique, {
-  foreignKey: { name: "timeslotId", allowNull: false },
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
 db.jurorTimeslot.hasMany(db.critique, {
@@ -75,10 +71,6 @@ db.jurorTimeslot.hasMany(db.critique, {
   onDelete: "CASCADE",
 });
 
-db.critique.belongsTo(db.userRole, {
-  foreignKey: { name: "critiquerId", allowNull: false },
-  onDelete: "CASCADE",
-});
 db.critique.belongsTo(db.studentTimeslot, {
   foreignKey: { allowNull: false },
   onDelete: "CASCADE",
