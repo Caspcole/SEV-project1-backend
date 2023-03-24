@@ -7,30 +7,30 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body.year) {
     res.status(400).send({
-      message: "year can not be empty!"
+      message: "year can not be empty!",
     });
     return;
   } else if (!req.body.code) {
     res.status(400).send({
-      message: "semester code can not be empty!"
+      message: "semester code can not be empty!",
     });
     return;
   }
-  
+
   const semester = {
     year: req.body.year,
-    code: req.body.code
+    code: req.body.code,
   };
 
   // Create and Save a new semester
   Semester.create(semester)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the semester."
+          err.message || "Some error occurred while creating the semester.",
       });
     });
 };
@@ -38,13 +38,13 @@ exports.create = (req, res) => {
 // Retrieve all semesters from the database
 exports.findAll = (req, res) => {
   Semester.findAll()
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving semesters."
+          err.message || "Some error occurred while retrieving semesters.",
       });
     });
 };
@@ -53,18 +53,18 @@ exports.findAll = (req, res) => {
 exports.findById = (req, res) => {
   const id = req.params.id;
   Semester.findByPk(id)
-    .then(data => {
+    .then((data) => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: 'Cannot find semester with id=' + id
+          message: "Cannot find semester with id=" + id,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: 'Error retrieving semester with id=' + id
+        message: "Error retrieving semester with id=" + id,
       });
     });
 };
@@ -73,48 +73,54 @@ exports.findById = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
   Semester.update(req.body, {
-    where: { id: id }
+    where: { id: id },
   })
-  .then(num => {
-    if (num == 1) {
-      res.send({
-        message: 'Semester was updated successfully.'
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Semester was updated successfully.",
+        });
+      } else {
+        res.send({
+          message:
+            "Cannot update semester with id=" +
+            id +
+            ". Maybe the semester was not found or req.body is empty!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating semester with id=" + id,
       });
-    } else {
-      res.send({
-        message: 'Cannot update semester with id=' + id + '. Maybe the semester was not found or req.body is empty!'
-      });
-    }
-  })
-  .catch(err => {
-    res.status(500).send({
-      message: 'Error updating semester with id=' + id
     });
-  });
 };
 
 // Delete a(n) semester with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
   Semester.destroy({
-    where: { id: id }
+    where: { id: id },
   })
-  .then(num => {
-    if (num == 1) {
-      res.send({
-        message: 'Semester was deleted successfully!'
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Semester was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message:
+            "Cannot delete semester with id=" +
+            id +
+            ". Maybe the semester was not found",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete semester with id=" + id,
       });
-    } else {
-      res.send({
-        message: 'Cannot delete semester with id=' + id + '. Maybe the semester was not found'
-      })
-    }
-  })
-  .catch((err) => {
-    res.status(500).send({
-      message: "Could not delete semester with id=" + id,
     });
-  });
 };
 
 // Delete all semester from the database.
@@ -130,6 +136,26 @@ exports.deleteAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while removing all semesters.",
+      });
+    });
+};
+
+//Get current semester
+exports.getSemesterByDate = (req, res) => {
+  Semester.findAll({
+    where: {
+      startDate: { [Op.lte]: req.params.date },
+      endDate: { [Op.gte]: req.params.date },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.stats(500).send({
+        message:
+          err.message ||
+          "Some error occurred while getting the current semester.",
       });
     });
 };

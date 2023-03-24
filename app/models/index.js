@@ -84,7 +84,6 @@ db.userRole.hasMany(db.evaluation, {
   foreignKey: { name: "facultyId", allowNull: false },
   onDelete: "CASCADE",
 });
-
 db.studentInstrument.hasMany(db.evaluation, {
   foreignKey: { name: "studentId", allowNull: false },
   onDelete: "CASCADE",
@@ -238,5 +237,7 @@ db.user.hasMany(db.session, {
   foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
+
+db.session.belongsTo(db.user);
 
 module.exports = db;

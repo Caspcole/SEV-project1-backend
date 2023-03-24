@@ -92,7 +92,6 @@ exports.findById = (req, res) => {
 // Retrieve all events from the database from the specified date onwards
 exports.findDateAndAfter = (req, res) => {
   const date = req.params.date;
-  console.log(date);
   Event.findAll({
     where: {
       date: {
