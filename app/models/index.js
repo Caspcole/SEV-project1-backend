@@ -71,7 +71,7 @@ db.studentTimeslot.hasMany(db.critique, {
   onDelete: "CASCADE",
 });
 db.jurorTimeslot.hasMany(db.critique, {
-  foreignKey: { name: "timeslotId", allowNull: false },
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
 
@@ -80,11 +80,11 @@ db.critique.belongsTo(db.userRole, {
   onDelete: "CASCADE",
 });
 db.critique.belongsTo(db.studentTimeslot, {
-  foreignKey: { name: "timeslotId", allowNull: false },
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
 db.critique.belongsTo(db.jurorTimeslot, {
-  foreignKey: { name: "timeslotId", allowNull: false },
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
 
