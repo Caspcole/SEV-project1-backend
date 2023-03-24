@@ -52,6 +52,7 @@ db.evaluationComment = require("./evaluationComment.model.js")(
   Sequelize
 );
 db.session = require("./session.model.js")(sequelize, Sequelize);
+db.jurorTimeslot = require("./jurorTimeslot.model.js")(sequelize, Sequelize);
 
 //Availability FKs
 db.user.hasMany(db.availability, {
@@ -69,12 +70,20 @@ db.studentTimeslot.hasMany(db.critique, {
   foreignKey: { name: "timeslotId", allowNull: false },
   onDelete: "CASCADE",
 });
+db.jurorTimeslot.hasMany(db.critique, {
+  foreignKey: { name: "timeslotId", allowNull: false },
+  onDelete: "CASCADE",
+});
 
 db.critique.belongsTo(db.userRole, {
   foreignKey: { name: "critiquerId", allowNull: false },
   onDelete: "CASCADE",
 });
 db.critique.belongsTo(db.studentTimeslot, {
+  foreignKey: { name: "timeslotId", allowNull: false },
+  onDelete: "CASCADE",
+});
+db.critique.belongsTo(db.jurorTimeslot, {
   foreignKey: { name: "timeslotId", allowNull: false },
   onDelete: "CASCADE",
 });
@@ -228,5 +237,20 @@ db.user.hasMany(db.session, {
 });
 
 db.session.belongsTo(db.user);
+
+// JurorTimeslot FKs
+db.eventTimeslot.hasMany(db.jurorTimeslot, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.userRole.hasMany(db.jurorTimeslot, {
+  foreignKey: { name: "jurorId", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.jurorTimeslot.belongsTo(db.eventTimeslot);
+db.jurorTimeslot.belongsTo(db.userRole, {
+  foreignKey: { name: "jurorId" },
+});
 
 module.exports = db;
