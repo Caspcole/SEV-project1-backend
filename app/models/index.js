@@ -59,7 +59,12 @@ db.user.hasMany(db.availability, {
   foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
+db.event.hasMany(db.availability, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
 db.availability.belongsTo(db.user);
+db.availability.belongsTo(db.event);
 
 //Critique FKs
 db.studentTimeslot.hasMany(db.critique, {
