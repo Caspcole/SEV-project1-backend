@@ -157,3 +157,21 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+// Get all availability for a user
+exports.getByUser = (req, res) => {
+  Availability.findAll({
+    where: {
+      userId: { [Op.eq]: req.params.userId },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Availabilities.",
+      });
+    });
+};
