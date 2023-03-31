@@ -1,6 +1,6 @@
 module.exports = (app) => {
   const event = require("../controllers/event.controller.js");
-  //const { authenticate } = require("../authorization/authorization.js");
+  // const { authenticate } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
   // Create a new event
@@ -16,7 +16,7 @@ module.exports = (app) => {
   // Delete a event with id
   router.delete("/:id", event.delete);
   // Delete all events
-  router.delete("/", [authenticate], event.deleteAll);
+  router.delete("/", event.deleteAll);
   // Retrieve timeslots fore current date
   router.get(
     "/critiqueTimeslots/:date",
@@ -26,7 +26,6 @@ module.exports = (app) => {
   // Retrieve critiques by semester id
   router.get(
     "/semesterCritiques/:semesterId",
-    [authenticate],
     event.getEventCritiquesBySemesterId
   );
 
