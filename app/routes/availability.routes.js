@@ -15,6 +15,8 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], availability.delete);
   // Delete all availability
   router.delete("/", [authenticate], availability.deleteAll);
+  // Get all availabilities by userId
+  router.get("/userId/:userId", [authenticate], availability.getByUser);
 
   app.use("/performance-t2/availability", router);
 };
