@@ -120,8 +120,7 @@ db.event.belongsTo(db.semester);
 
 //EventTimeslot FKs
 db.userRole.hasMany(db.eventTimeslot, {
-  foreignKey: { name: "accompanistId", allowNull: false },
-  onDelete: "CASCADE",
+  foreignKey: { name: "accompanistId" },
 });
 db.event.hasMany(db.eventTimeslot);
 
