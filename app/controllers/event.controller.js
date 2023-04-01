@@ -231,6 +231,7 @@ exports.getStudentTimeslotsForCurrentDate = (req, res) => {
     // })
     .then((data) => {
       let text = "[";
+      let performingStudents = "";
       for (let eI = 0; eI < data.length; eI++) {
         let curEvent = data[eI].dataValues;
         text +=
@@ -270,14 +271,25 @@ exports.getStudentTimeslotsForCurrentDate = (req, res) => {
               curStudentTs.studentInstrument.dataValues.instrument.dataValues
                 .type +
               '"}';
+
+            performingStudents +=
+              student.dataValues.user.dataValues.fName +
+              " " +
+              student.dataValues.user.dataValues.lName;
+
             if (curEventTs.studentTimeslots.length - stI > 1) {
               text += ",";
             }
+            if (curEventTs.studentTimeslots.length - stI > 1) {
+              performingStudents += ", ";
+            }
           }
-          text += "]}";
+          text += "],";
+          text += '"performingStudents":"' + performingStudents + '"';
           if (curEvent.eventTimeslots.length - etI > 1) {
             text += ",";
           }
+          text += "}";
         }
         // text += "]}]}";
         text += "]}";
