@@ -1,6 +1,7 @@
 const db = require("../models");
 const { Op } = require("sequelize");
 const { event } = require("../models");
+const { raw } = require("body-parser");
 const Event = db.event;
 
 // Create and Save a new event
@@ -272,8 +273,8 @@ exports.getStudentTimeslotsForCurrentDate = (req, res) => {
             if (curEventTs.studentTimeslots.length - stI > 1) {
               text += ",";
             }
-            text += "]}";
           }
+          text += "]}";
           if (curEvent.eventTimeslots.length - etI > 1) {
             text += ",";
           }
