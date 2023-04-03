@@ -151,18 +151,21 @@ exports.getStudentRepertoire = async (req, res) => {
           {
             model: db.studentInstrument,
             required: true,
-            include: {
-              model: db.userRole,
-              as: "student",
-              required: true,
-              include: {
-                model: db.user,
+            include: [
+              {
+                model: db.userRole,
+                as: "student",
                 required: true,
-                where: {
-                  id: { [Op.eq]: req.params.userId },
+                include: {
+                  model: db.user,
+                  required: true,
+                  where: {
+                    id: { [Op.eq]: req.params.userId },
+                  },
                 },
               },
-            },
+              { model: db.instrument, required: true },
+            ],
           },
           {
             model: db.song,
@@ -194,18 +197,21 @@ exports.getStudentRepertoire = async (req, res) => {
       {
         model: db.studentInstrument,
         required: true,
-        include: {
-          model: db.userRole,
-          as: "student",
-          required: true,
-          include: {
-            model: db.user,
+        include: [
+          {
+            model: db.userRole,
+            as: "student",
             required: true,
-            where: {
-              id: { [Op.eq]: req.params.userId },
+            include: {
+              model: db.user,
+              required: true,
+              where: {
+                id: { [Op.eq]: req.params.userId },
+              },
             },
           },
-        },
+          { model: db.instrument, required: true },
+        ],
       },
       {
         model: db.song,
