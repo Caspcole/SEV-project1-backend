@@ -141,36 +141,46 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.getStudentRepertoire = (req, res) => {
-  db.semester.findAll({
-    include: {
-      model: db.repertoire,
-      required: true,
-      include: [
-        {
-          model: db.studentInstrument,
-          required: true,
-          include: {
-            model: db.userRole,
-            as: "student",
+  db.semester
+    .findAll({
+      include: {
+        model: db.repertoire,
+        required: true,
+        include: [
+          {
+            model: db.studentInstrument,
             required: true,
             include: {
-              model: db.user,
+              model: db.userRole,
+              as: "student",
               required: true,
-              where: {
-                id: { [Op.eq]: req.params.userId },
+              include: {
+                model: db.user,
+                required: true,
+                where: {
+                  id: { [Op.eq]: req.params.userId },
+                },
               },
             },
           },
-        },
-        {
-          model: db.song,
-          required: true,
-          include: {
-            model: db.composer,
+          {
+            model: db.song,
             required: true,
+            include: {
+              model: db.composer,
+              required: true,
+            },
           },
-        },
-      ],
-    },
-  });
+        ],
+      },
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving repertoires.",
+      });
+    });
 };
