@@ -52,30 +52,36 @@ db.evaluationComment = require("./evaluationComment.model.js")(
   Sequelize
 );
 db.session = require("./session.model.js")(sequelize, Sequelize);
+db.jurorTimeslot = require("./jurorTimeslot.model.js")(sequelize, Sequelize);
 
 //Availability FKs
 db.user.hasMany(db.availability, {
   foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
+db.event.hasMany(db.availability, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
 db.availability.belongsTo(db.user);
+db.availability.belongsTo(db.event);
 
 //Critique FKs
-db.userRole.hasMany(db.critique, {
-  foreignKey: { name: "critiquerId", allowNull: false },
+db.studentTimeslot.hasMany(db.critique, {
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
-db.studentTimeslot.hasMany(db.critique, {
-  foreignKey: { name: "timeslotId", allowNull: false },
+db.jurorTimeslot.hasMany(db.critique, {
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
 
-db.critique.belongsTo(db.userRole, {
-  foreignKey: { name: "critiquerId", allowNull: false },
+db.critique.belongsTo(db.studentTimeslot, {
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
-db.critique.belongsTo(db.studentTimeslot, {
-  foreignKey: { name: "timeslotId", allowNull: false },
+db.critique.belongsTo(db.jurorTimeslot, {
+  foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
 
@@ -120,8 +126,7 @@ db.event.belongsTo(db.semester);
 
 //EventTimeslot FKs
 db.userRole.hasMany(db.eventTimeslot, {
-  foreignKey: { name: "accompanistId", allowNull: false },
-  onDelete: "CASCADE",
+  foreignKey: { name: "accompanistId" },
 });
 db.event.hasMany(db.eventTimeslot);
 
@@ -239,5 +244,20 @@ db.user.hasMany(db.session, {
 });
 
 db.session.belongsTo(db.user);
+
+// JurorTimeslot FKs
+db.eventTimeslot.hasMany(db.jurorTimeslot, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+db.userRole.hasMany(db.jurorTimeslot, {
+  foreignKey: { name: "jurorId", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+db.jurorTimeslot.belongsTo(db.eventTimeslot);
+db.jurorTimeslot.belongsTo(db.userRole, {
+  foreignKey: { name: "jurorId" },
+});
 
 module.exports = db;
