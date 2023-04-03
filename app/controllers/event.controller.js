@@ -386,3 +386,84 @@ exports.getEventCritiquesBySemesterId = (req, res) => {
       });
     });
 };
+
+// Retrieve critiques by semester id and student id
+exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
+  StudentTimeslot.findAll({
+    attributes: ["id"],
+    include: [
+      {
+        model: db.studentInstrument,
+        required: true,
+        attributes: ["id"],
+        include: [
+          {
+            model: db.userRole,
+            required: true,
+            as: "student",
+            attributes: ["id", "title"],
+            where: {
+              userId: { [Op.eq]: req.params.userId },
+            },
+            include: {
+              model: db.user,
+              required: true,
+              attributes: ["id", "fName", "lName"],
+            },
+          },
+          {
+            model: db.instrument,
+            required: true,
+            attributes: ["id", "name"],
+          },
+        ],
+      },
+      {
+        model: db.eventTimeslot,
+        required: true,
+        subQuery: false,
+        attributes: ["id"],
+        include: [
+          {
+            model: db.event,
+            required: true,
+            where: {
+              semesterId: { [Op.eq]: req.params.semesterId },
+            },
+            attributes: ["id", "date", "type"],
+          },
+          {
+            model: db.jurorTimeslot,
+            required: true,
+            attributes: ["id"],
+            include: [
+              {
+                model: db.userRole,
+                required: true,
+                attributes: ["id", "title"],
+                include: {
+                  model: db.user,
+                  required: true,
+                  attributes: ["id", "fName", "lName"],
+                },
+              },
+              {
+                model: db.critique,
+                required: true,
+                attributes: ["id", "type", "grade", "comment"],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};

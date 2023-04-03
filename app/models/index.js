@@ -144,14 +144,12 @@ db.song.hasMany(db.repertoire, {
   foreignKey: { allowNull: false },
   onDelete: "CASCADE",
 });
-db.semester.hasMany(db.repertoire, {
-  foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
-});
+db.semester.hasMany(db.repertoire);
 
 db.repertoire.belongsTo(db.semester);
 db.repertoire.belongsTo(db.studentInstrument);
 db.repertoire.belongsTo(db.song);
+db.repertoire.belongsTo(db.semester);
 
 //Song FKs
 db.composer.hasMany(db.song, {

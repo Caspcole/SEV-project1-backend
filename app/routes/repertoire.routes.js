@@ -15,6 +15,12 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], repertoire.delete);
   // Delete all repertoires
   router.delete("/", [authenticate], repertoire.deleteAll);
+  // Get all repertoire by semester for userId
+  router.get(
+    "/userId/:userId",
+    [authenticate],
+    repertoire.getStudentRepertoire
+  );
 
   app.use("/performance-t2/repertoire", router);
 };
