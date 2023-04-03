@@ -23,6 +23,12 @@ module.exports = (app) => {
     [authenticate],
     event.getEventCritiquesBySemesterId
   );
+  // Retrieve critiques by semester id and student id
+  router.get(
+    "/semesterCritiques/:semesterId/user/:userId",
+    [authenticate],
+    event.getEventCritiquesBySemesterAndStudent
+  );
 
   app.use("/performance-t2/event", router);
 };
