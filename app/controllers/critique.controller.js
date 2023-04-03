@@ -15,14 +15,14 @@ exports.create = (req, res) => {
       message: "comment can not be empty!",
     });
     return;
-  } else if (!req.body.critiquerId) {
+  } else if (!req.body.jurorTimeslotId) {
     res.status(400).send({
-      message: "critiquerId can not be empty!",
+      message: "jurorTimeslotId can not be empty!",
     });
     return;
-  } else if (!req.body.timeslotId) {
+  } else if (!req.body.studentTimeslotId) {
     res.status(400).send({
-      message: "timeslotId can not be empty!",
+      message: "studentTimeslotId can not be empty!",
     });
     return;
   }
@@ -31,8 +31,10 @@ exports.create = (req, res) => {
     type: req.body.type,
     grade: req.body.grade,
     comment: req.body.comment,
-    critiquerId: req.body.critiquerId,
-    timeslotId: req.body.timeslotId,
+    //critiquerId: req.body.critiquerId,
+    jurorTimeslotId: req.body.jurorTimeslotId,
+    // timeslotId: req.body.timeslotId,
+    studentTimeslotId: req.body.studentTimeslotId,
   };
 
   // Create and Save a new critique
