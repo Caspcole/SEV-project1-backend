@@ -140,8 +140,9 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-exports.getStudentRepertoire = (req, res) => {
-  db.semester
+exports.getStudentRepertoire = async (req, res) => {
+  var returnData;
+  await db.semester
     .findAll({
       include: {
         model: db.repertoire,
@@ -175,7 +176,50 @@ exports.getStudentRepertoire = (req, res) => {
       },
     })
     .then((data) => {
-      res.send(data);
+      // res.send(data);
+      returnData = data;
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving repertoires.",
+      });
+    });
+
+  await Repertoire.findAll({
+    where: {
+      semesterId: { [Op.is]: null },
+    },
+    include: [
+      {
+        model: db.studentInstrument,
+        required: true,
+        include: {
+          model: db.userRole,
+          as: "student",
+          required: true,
+          include: {
+            model: db.user,
+            required: true,
+            where: {
+              id: { [Op.eq]: req.params.userId },
+            },
+          },
+        },
+      },
+      {
+        model: db.song,
+        required: true,
+        include: {
+          model: db.composer,
+          required: true,
+        },
+      },
+    ],
+  })
+    .then((data) => {
+      returnData.push({ id: null, repertoires: data });
+      res.send(returnData);
     })
     .catch((err) => {
       res.status(500).send({
