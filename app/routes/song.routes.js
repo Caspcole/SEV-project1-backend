@@ -15,6 +15,8 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], song.delete);
   // Delete all songs
   router.delete("/", [authenticate], song.deleteAll);
+  // Get by composer Id
+  router.get("/composer/:composerId", [authenticate], song.getByComposer);
 
   app.use("/performance-t2/song", router);
 };
