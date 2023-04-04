@@ -17,6 +17,13 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], event.delete);
   // Delete all events
   router.delete("/", [authenticate], event.deleteAll);
+  // Retrieve timeslots fore current date
+  router.get(
+    "/critiqueTimeslots/:date",
+    [authenticate],
+    event.getStudentTimeslotsForCurrentDate
+  );
+
   // Retrieve critiques by semester id
   router.get(
     "/semesterCritiques/:semesterId",
@@ -30,5 +37,6 @@ module.exports = (app) => {
     event.getEventCritiquesBySemesterAndStudent
   );
 
+  //REMEMBER TO RE ADD THE ", [authenticate],"
   app.use("/performance-t2/event", router);
 };

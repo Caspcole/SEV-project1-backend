@@ -5,27 +5,21 @@ const JurorTimeslot = db.jurorTimeslot;
 // Create and Save a new jurorTimeslot
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.studentInstrumentId) {
-    res.status(400).send({
-      message: "studentInstrumentId can not be empty!",
-    });
-    return;
-  } else if (!req.body.eventTimeslotId) {
+  if (!req.body.eventTimeslotId) {
     res.status(400).send({
       message: "eventTimeslotId can not be empty!",
     });
     return;
-  } else if (!req.body.instructorId) {
+  } else if (!req.body.jurorId) {
     res.status(400).send({
-      message: "instructorId can not be empty!",
+      message: "jurorId can not be empty!",
     });
     return;
   }
 
   const jurorTimeslot = {
-    studentInstrumentId: req.body.studentInstrumentId,
     eventTimeslotId: req.body.eventTimeslotId,
-    instructorId: req.body.instructorId,
+    jurorId: req.body.jurorId,
   };
 
   // Create and Save a new jurorTimeslot
