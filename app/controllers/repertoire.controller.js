@@ -15,11 +15,6 @@ exports.create = (req, res) => {
       message: "songId name can not be empty!",
     });
     return;
-  } else if (!req.body.semesterId) {
-    res.status(400).send({
-      message: "semesterId name can not be empty!",
-    });
-    return;
   }
 
   const repertoire = {
@@ -147,6 +142,39 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.getStudentRepertoire = async (req, res) => {
+  await Repertoire.findAll({
+    include: {
+      model: db.studentInstrument,
+      required: true,
+      include: [
+        {
+          model: db.userRole,
+          as: "student",
+          required: true,
+          include: {
+            model: db.user,
+            required: true,
+            where: {
+              id: { [Op.eq]: req.params.userId },
+            },
+          },
+        },
+        { model: db.instrument, required: true },
+      ],
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving repertoires.",
+      });
+    });
+};
+
+exports.getSemesterStudentRepertoire = async (req, res) => {
   var returnData;
   await db.semester
     .findAll({
