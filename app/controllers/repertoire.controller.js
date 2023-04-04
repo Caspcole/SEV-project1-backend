@@ -15,11 +15,17 @@ exports.create = (req, res) => {
       message: "songId name can not be empty!",
     });
     return;
+  } else if (!req.body.semesterId) {
+    res.status(400).send({
+      message: "semesterId name can not be empty!",
+    });
+    return;
   }
 
   const repertoire = {
     studentInstrumentId: req.body.studentInstrumentId,
     songId: req.body.songId,
+    semesterId: req.body.semesterId,
   };
 
   // Create and Save a new repertoire
