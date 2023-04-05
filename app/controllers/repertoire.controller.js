@@ -258,7 +258,9 @@ exports.getSemesterStudentRepertoire = async (req, res) => {
     ],
   })
     .then((data) => {
-      returnData.push({ id: null, repertoires: data });
+      if (data.length > 0) {
+        returnData.push({ id: null, repertoires: data });
+      }
       res.send(returnData);
     })
     .catch((err) => {
