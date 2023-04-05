@@ -472,7 +472,6 @@ exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
 exports.getEventsBySemesterId = (req, res) => {
   Event.findAll({
     where: { semesterId: { [Op.eq]: req.params.semesterId } },
-    order: [["date", "DESC"]],
   })
     .then((data) => {
       res.send(data);
