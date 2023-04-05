@@ -21,6 +21,11 @@ module.exports = (app) => {
     [authenticate],
     repertoire.getStudentRepertoire
   );
+  router.get(
+    "/semesters/userId/:userId",
+    [authenticate],
+    repertoire.getSemesterStudentRepertoire
+  );
 
   app.use("/performance-t2/repertoire", router);
 };

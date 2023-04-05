@@ -4,38 +4,39 @@ const Composer = db.composer;
 
 // Create and Save a new composer
 exports.create = (req, res) => {
-  
   const composer = {
     fName: req.body.fName,
     lName: req.body.lName,
     nationality: req.body.nationality,
     dateOfBirth: req.body.dateOfBirth,
-    dateOfDeath: req.body.dateOfDeath
+    dateOfDeath: req.body.dateOfDeath,
   };
 
   // Create and Save a new composer
   Composer.create(composer)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the composer."
+          err.message || "Some error occurred while creating the composer.",
       });
     });
 };
 
 // Retrieve all composers from the database
 exports.findAll = (req, res) => {
-  Composer.findAll()
-    .then(data => {
+  Composer.findAll({
+    order: [["fName"], ["lName"]],
+  })
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving composers."
+          err.message || "Some error occurred while retrieving composers.",
       });
     });
 };
@@ -44,18 +45,18 @@ exports.findAll = (req, res) => {
 exports.findById = (req, res) => {
   const id = req.params.id;
   Composer.findByPk(id)
-    .then(data => {
+    .then((data) => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: 'Cannot find composer with id=' + id
+          message: "Cannot find composer with id=" + id,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: 'Error retrieving composer with id=' + id
+        message: "Error retrieving composer with id=" + id,
       });
     });
 };
@@ -64,48 +65,54 @@ exports.findById = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
   Composer.update(req.body, {
-    where: { id: id }
+    where: { id: id },
   })
-  .then(num => {
-    if (num == 1) {
-      res.send({
-        message: 'Composer was updated successfully.'
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Composer was updated successfully.",
+        });
+      } else {
+        res.send({
+          message:
+            "Cannot update composer with id=" +
+            id +
+            ". Maybe the composer was not found or req.body is empty!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating composer with id=" + id,
       });
-    } else {
-      res.send({
-        message: 'Cannot update composer with id=' + id + '. Maybe the composer was not found or req.body is empty!'
-      });
-    }
-  })
-  .catch(err => {
-    res.status(500).send({
-      message: 'Error updating composer with id=' + id
     });
-  });
 };
 
 // Delete a(n) composer with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
   Composer.destroy({
-    where: { id: id }
+    where: { id: id },
   })
-  .then(num => {
-    if (num == 1) {
-      res.send({
-        message: 'Composer was deleted successfully!'
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Composer was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message:
+            "Cannot delete composer with id=" +
+            id +
+            ". Maybe the composer was not found",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete composer with id=" + id,
       });
-    } else {
-      res.send({
-        message: 'Cannot delete composer with id=' + id + '. Maybe the composer was not found'
-      })
-    }
-  })
-  .catch((err) => {
-    res.status(500).send({
-      message: "Could not delete composer with id=" + id,
     });
-  });
 };
 
 // Delete all composer from the database.

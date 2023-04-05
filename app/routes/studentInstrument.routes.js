@@ -15,6 +15,8 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], studentInstrument.delete);
   // Delete all studentInstruments
   router.delete("/", [authenticate], studentInstrument.deleteAll);
+  // Get by userId
+  router.get("/userId/:userId", [authenticate], studentInstrument.getByUserId);
 
   app.use("/performance-t2/studentInstrument", router);
 };
