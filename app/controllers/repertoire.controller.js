@@ -178,6 +178,7 @@ exports.getSemesterStudentRepertoire = async (req, res) => {
   var returnData;
   await db.semester
     .findAll({
+      order: [["year", "DESC"], db.Sequelize.literal(`code = 'SP' ASC`)],
       include: {
         model: db.repertoire,
         required: true,
