@@ -34,6 +34,7 @@ require("./app/routes/studentTimeslot.routes.js")(app);
 require("./app/routes/timeslotSong.routes.js")(app);
 require("./app/routes/user.routes.js")(app);
 require("./app/routes/userRole.routes.js")(app);
+require("./app/routes/jurorTimeslot.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3022;

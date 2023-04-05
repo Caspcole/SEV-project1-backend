@@ -95,12 +95,18 @@ db.studentInstrument.hasMany(db.evaluation, {
   onDelete: "CASCADE",
 });
 
+db.semester.hasMany(db.evaluation, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
+
 db.evaluation.belongsTo(db.userRole, {
   foreignKey: { name: "facultyId" },
 });
 db.evaluation.belongsTo(db.studentInstrument, {
   foreignKey: { name: "studentId" },
 });
+db.evaluation.belongsTo(db.semester);
 
 //EvaluationComment FKs
 db.evaluation.hasMany(db.evaluationComment, {
@@ -140,6 +146,7 @@ db.song.hasMany(db.repertoire, {
 });
 db.semester.hasMany(db.repertoire);
 
+db.repertoire.belongsTo(db.semester);
 db.repertoire.belongsTo(db.studentInstrument);
 db.repertoire.belongsTo(db.song);
 db.repertoire.belongsTo(db.semester);

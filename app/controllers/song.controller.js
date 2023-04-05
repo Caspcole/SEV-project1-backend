@@ -63,6 +63,7 @@ exports.findById = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error retrieving song with id=" + id,
+<<<<<<< HEAD
       });
     });
 };
@@ -87,6 +88,8 @@ exports.findByComposerId = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving songs.",
+=======
+>>>>>>> dev
       });
     });
 };
@@ -160,3 +163,23 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+<<<<<<< HEAD
+=======
+
+// Get by composer
+exports.getByComposer = (req, res) => {
+  Song.findAll({
+    where: {
+      composerId: { [Op.eq]: req.params.composerId },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving songs.",
+      });
+    });
+};
+>>>>>>> dev

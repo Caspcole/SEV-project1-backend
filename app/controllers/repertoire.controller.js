@@ -20,6 +20,7 @@ exports.create = (req, res) => {
   const repertoire = {
     studentInstrumentId: req.body.studentInstrumentId,
     songId: req.body.songId,
+    semesterId: req.body.semesterId,
   };
 
   // Create and Save a new repertoire
@@ -140,9 +141,44 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-exports.getStudentRepertoire = (req, res) => {
-  db.semester
+exports.getStudentRepertoire = async (req, res) => {
+  await Repertoire.findAll({
+    include: {
+      model: db.studentInstrument,
+      required: true,
+      include: [
+        {
+          model: db.userRole,
+          as: "student",
+          required: true,
+          include: {
+            model: db.user,
+            required: true,
+            where: {
+              id: { [Op.eq]: req.params.userId },
+            },
+          },
+        },
+        { model: db.instrument, required: true },
+      ],
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving repertoires.",
+      });
+    });
+};
+
+exports.getSemesterStudentRepertoire = async (req, res) => {
+  var returnData;
+  await db.semester
     .findAll({
+      order: [["year", "DESC"], db.Sequelize.literal(`code = 'SP' ASC`)],
       include: {
         model: db.repertoire,
         required: true,
@@ -150,18 +186,21 @@ exports.getStudentRepertoire = (req, res) => {
           {
             model: db.studentInstrument,
             required: true,
-            include: {
-              model: db.userRole,
-              as: "student",
-              required: true,
-              include: {
-                model: db.user,
+            include: [
+              {
+                model: db.userRole,
+                as: "student",
                 required: true,
-                where: {
-                  id: { [Op.eq]: req.params.userId },
+                include: {
+                  model: db.user,
+                  required: true,
+                  where: {
+                    id: { [Op.eq]: req.params.userId },
+                  },
                 },
               },
-            },
+              { model: db.instrument, required: true },
+            ],
           },
           {
             model: db.song,
@@ -175,7 +214,55 @@ exports.getStudentRepertoire = (req, res) => {
       },
     })
     .then((data) => {
-      res.send(data);
+      // res.send(data);
+      returnData = data;
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving repertoires.",
+      });
+    });
+
+  await Repertoire.findAll({
+    where: {
+      semesterId: { [Op.is]: null },
+    },
+    include: [
+      {
+        model: db.studentInstrument,
+        required: true,
+        include: [
+          {
+            model: db.userRole,
+            as: "student",
+            required: true,
+            include: {
+              model: db.user,
+              required: true,
+              where: {
+                id: { [Op.eq]: req.params.userId },
+              },
+            },
+          },
+          { model: db.instrument, required: true },
+        ],
+      },
+      {
+        model: db.song,
+        required: true,
+        include: {
+          model: db.composer,
+          required: true,
+        },
+      },
+    ],
+  })
+    .then((data) => {
+      if (data.length > 0) {
+        returnData.push({ id: null, repertoires: data });
+      }
+      res.send(returnData);
     })
     .catch((err) => {
       res.status(500).send({
