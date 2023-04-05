@@ -160,8 +160,6 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
-<<<<<<< HEAD
-=======
 
 // Get by composer
 exports.getByComposer = (req, res) => {
@@ -179,4 +177,3 @@ exports.getByComposer = (req, res) => {
       });
     });
 };
->>>>>>> dev
