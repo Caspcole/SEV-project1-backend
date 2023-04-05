@@ -63,7 +63,6 @@ exports.findById = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error retrieving song with id=" + id,
-<<<<<<< HEAD
       });
     });
 };
@@ -88,8 +87,6 @@ exports.findByComposerId = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving songs.",
-=======
->>>>>>> dev
       });
     });
 };
