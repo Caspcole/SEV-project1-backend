@@ -36,7 +36,12 @@ module.exports = (app) => {
     [authenticate],
     event.getEventCritiquesBySemesterAndStudent
   );
+  // Retrieve all events within a semester
+  router.get(
+    "/semesterId/:semesterId",
+    [authenticate],
+    event.getEventsBySemesterId
+  );
 
-  //REMEMBER TO RE ADD THE ", [authenticate],"
   app.use("/performance-t2/event", router);
 };
