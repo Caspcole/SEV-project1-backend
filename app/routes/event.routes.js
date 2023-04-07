@@ -10,7 +10,9 @@ module.exports = (app) => {
   // Retrieve a single event with id
   router.get("/:id", [authenticate], event.findById);
   // Retrieve all events with date after date
-  router.get("/date/:date", [authenticate], event.findDateAndAfter);
+  router.get("/gtedate/:date", [authenticate], event.findDateAndAfter);
+  // Retrieve all events with date before date
+  router.get("/ltedate/:date", [authenticate], event.findDateAndBefore);
   // Update a event with id
   router.put("/:id", [authenticate], event.update);
   // Delete a event with id
