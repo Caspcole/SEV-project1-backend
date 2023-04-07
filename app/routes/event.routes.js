@@ -26,6 +26,13 @@ module.exports = (app) => {
     event.getStudentTimeslotsForCurrentDate
   );
 
+  // Retrieve events by semesterId
+  router.get(
+    "/semesterEvents/:semesterId",
+    [authenticate],
+    event.getEventsBySemesterId
+  );
+
   // Retrieve critiques by semester id
   router.get(
     "/semesterCritiques/:semesterId",

@@ -1,7 +1,8 @@
 const db = require("../models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { event } = require("../models");
 const { raw } = require("body-parser");
+// const { Where } = require("sequelize/types/utils");
 const Event = db.event;
 const StudentTimeslot = db.studentTimeslot;
 
@@ -327,6 +328,29 @@ exports.getStudentTimeslotsForCurrentDate = (req, res) => {
       res.send(JSON.parse(text));
       // res.send(text);
       // res.send();
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};
+
+exports.getEventsBySemesterId = (req, res) => {
+  Event.findAll({
+    attributes: ["id", "type", "date", "startTime", "endTime"],
+    where: {
+      semesterId: { [Op.eq]: req.params.semesterId },
+    },
+  })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: "Cannot find event on or after " + date,
+        });
+      }
     })
     .catch((err) => {
       res.status(500).send({
