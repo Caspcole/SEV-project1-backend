@@ -67,6 +67,30 @@ exports.findById = (req, res) => {
     });
 };
 
+// Retrieve all songs from the database with composer id
+exports.findByComposerId = (req, res) => {
+  const id = req.params.id;
+  Song.findAll({
+    where: {
+      composerId: id,
+    },
+  })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: "Cannot find songs with ComposerId=" + id,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving songs.",
+      });
+    });
+};
+
 // Update a(n) song by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

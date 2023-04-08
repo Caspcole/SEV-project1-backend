@@ -9,6 +9,8 @@ module.exports = (app) => {
   router.get("/", [authenticate], song.findAll);
   // Retrieve a single song with id
   router.get("/:id", [authenticate], song.findById);
+  // Retrieve all songs with composer id
+  router.get("/composer/:id", song.findByComposerId);
   // Update a song with id
   router.put("/:id", [authenticate], song.update);
   // Delete a song with id
