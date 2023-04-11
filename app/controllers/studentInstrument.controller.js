@@ -185,3 +185,54 @@ exports.getByUserId = (req, res) => {
       });
     });
 };
+
+exports.getInstrumentAndInstructorAndAccompanistByUserId = (req, res) => {
+  StudentInstrument.findAll({
+    include: [
+      {
+        model: db.userRole,
+        as: "student",
+        required: true,
+        include: {
+          model: db.user,
+          required: true,
+          where: {
+            id: { [Op.eq]: req.params.userId },
+          },
+        },
+      },
+      {
+        model: db.userRole,
+        as: "instructor",
+        required: true,
+        include: {
+          model: db.user,
+          required: true,
+        },
+      },
+      {
+        model: db.userRole,
+        as: "accompanist",
+        required: false,
+        include: {
+          model: db.user,
+          required: true,
+        },
+      },
+      {
+        model: db.instrument,
+        required: true,
+      },
+    ],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving studentInstruments.",
+      });
+    });
+};
