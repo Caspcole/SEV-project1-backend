@@ -11,6 +11,12 @@ module.exports = (app) => {
   router.get("/:id", [authenticate], eventTimeslot.findById);
   // Retrieve all eventTimeslots with eventId of id
   router.get("/event/:id", [authenticate], eventTimeslot.findByEventId);
+  // Retrieve all eventTimeslots and their studentTimeslots with eventId of id
+  router.get(
+    "/event/:id/studentTimeslot",
+    [authenticate],
+    eventTimeslot.findEventTimeslotsAndStudentTimeslotsByEvent
+  );
   // Update a eventTimeslot with id
   router.put("/:id", [authenticate], eventTimeslot.update);
   // Delete a eventTimeslot with id
