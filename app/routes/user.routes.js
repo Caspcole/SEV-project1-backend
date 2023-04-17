@@ -9,6 +9,8 @@ module.exports = (app) => {
   router.get("/", [authenticate], user.findAll);
   // Retrieve all users with student role
   router.get("/students", [authenticate], user.findAllStudents);
+  // Retrieve all users with student role
+  router.get("/roles/:id", [authenticate], user.findUsersRoles);
   // Retrieve a single user with id
   router.get("/:id", [authenticate], user.findById);
   // Update a user with id
