@@ -36,7 +36,7 @@ exports.create = (req, res) => {
     return;
   }
 
-  const event = {
+  const createdEvent = {
     type: req.body.type,
     date: req.body.date,
     startTime: req.body.startTime,
@@ -48,7 +48,7 @@ exports.create = (req, res) => {
   };
 
   // Create and Save a new event
-  Event.create(event)
+  Event.create(createdEvent)
     .then((data) => {
       res.send(data);
     })
