@@ -53,6 +53,49 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Retrieve all roles for a user who are also students from the database
+exports.findUsersRoles = (req, res) => {
+  const id = req.params.id;
+  User.findAll({
+    where: {
+      id: id,
+    },
+    include: {
+      model: db.userRole,
+      required: true,
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving users.",
+      });
+    });
+};
+
+// Retrieve all users who are also students from the database
+exports.findAllStudents = (req, res) => {
+  User.findAll({
+    include: {
+      model: db.userRole,
+      required: true,
+      where: {
+        role: "student",
+      },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving users.",
+      });
+    });
+};
+
 // Retrieve a(n) user by id
 exports.findById = (req, res) => {
   const id = req.params.id;

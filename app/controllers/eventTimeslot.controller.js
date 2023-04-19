@@ -79,12 +79,40 @@ exports.findById = (req, res) => {
     });
 };
 
-// Retrieve a(n) eventTimeslot by id
+// Retrieve a(n) eventTimeslot by an event id
 exports.findByEventId = (req, res) => {
   const id = req.params.id;
   EventTimeslot.findAll({
     where: {
       eventId: id,
+    },
+  })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: "Cannot find eventTimeslots with EventId=" + id,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error retrieving eventTimeslot with EventId=" + id,
+      });
+    });
+};
+
+// Retrieve a(n) eventTimeslot and it's studentTimeslots by an event's id
+exports.findEventTimeslotsAndStudentTimeslotsByEvent = (req, res) => {
+  const id = req.params.id;
+  EventTimeslot.findAll({
+    where: {
+      eventId: id,
+    },
+    include: {
+      model: db.studentTimeslot,
+      required: false,
     },
   })
     .then((data) => {
