@@ -175,3 +175,22 @@ exports.getByUser = (req, res) => {
       });
     });
 };
+
+// Get all availability for a user
+exports.getByUserAndDate = (req, res) => {
+  Availability.findAll({
+    where: {
+      userId: { [Op.eq]: req.params.userId },
+      date: { [Op.eq]: req.params.date },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Availabilities.",
+      });
+    });
+};
